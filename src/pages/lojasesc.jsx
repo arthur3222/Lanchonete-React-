@@ -1,32 +1,37 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { User, Menu } from "lucide-react";
 
 export default function Lojas() {
   return (
-    <div className="min-h-screen w-full bg-[#003E7E] text-white flex flex-col items-center pt-6 px-4">
-      {/* Ícone menu (caixa preta) */}
-      <div className="absolute top-3 left-3 w-6 h-6 bg-black rounded-sm" />
+    <div className="relative min-h-screen w-full bg-[#003E7E] text-white flex flex-col items-center pt-6 px-4">
+      <Menu size={24} className="absolute top-4 left-4 z-10" />
 
-      {/* Título */}
-      <h1 className="text-xs tracking-widest font-bold mb-6">SEJA BEM VINDO</h1>
+      <h1 className="text-3xl tracking-widest font-bold mb-10">SEJA BEM VINDO</h1>
 
-      {/* Avatar (caixa preta circular) */}
-      <div className="w-28 h-28 bg-black rounded-full flex items-center justify-center mb-3">
-        <span className="text-4xl font-bold">👤</span>
+      <div className="w-28 h-28 bg-[#2f3031] rounded-full flex items-center justify-center mb-3">
+        <User size={60} color="black" />
       </div>
 
-      {/* Subtítulo */}
       <span className="text-xs font-semibold tracking-wide mb-10">LOJAS</span>
 
-      {/* Card Fazer Pedido (retângulo preto) */}
-      <div className="w-64 h-56 bg-black relative flex items-center justify-center rounded-sm">
-        <div className="absolute inset-0 bg-black/70 rounded-sm" />
-        <span className="relative text-lg font-extrabold text-center leading-tight">
-          FAZER<br />PEDIDO
+      <div className="w-64 h-56 relative flex items-center justify-center rounded-sm overflow-hidden">
+        {/* fundo em gradiente estático (substitua por <img> se adicionar o arquivo loja.jpg em src/img) */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-700 via-gray-900 to-black z-0" />
+        {/* overlay leve para contraste */}
+        <div className="absolute inset-0 " />
+
+        <img
+          src="/img/pedido.png"
+          alt="Loja"
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        />
+        {/* texto por cima */}
+        <span className="relative text-lg font-extrabold text-center leading-tight z-20 text-white">
+          FAZER <br />PEDIDO
         </span>
       </div>
 
-      {/* Ações */}
       <div className="mt-12 flex gap-4">
         <Link
           to="/"
