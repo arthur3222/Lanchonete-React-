@@ -1,56 +1,40 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { User, Menu } from "lucide-react";
+import { User } from "lucide-react";
+import HamburgerMenu from "../components/HamburgerMenu"; // import adicionado
 
 export default function Lojas() {
   return (
-    <div className="relative min-h-screen w-full bg-[#003E7E] text-white flex flex-col items-center pt-6 px-4">
-      <Menu size={24} className="absolute top-4 left-4 z-10" />
+    <div className="relative min-h-screen w-full bg-[#003E7E] text-white flex flex-col items-center justify-center px-4">
+      <HamburgerMenu /> {/* hambúrguer funcional */}
+      <h1 className="mt-0 text-sm md:text-base font-bold tracking-[0.3em] uppercase">
+        SEJA BEM VINDO
+      </h1>
 
-      <h1 className="text-3xl tracking-widest font-bold mb-10">SEJA BEM VINDO</h1>
-
-      <div className="w-28 h-28 bg-[#2f3031] rounded-full flex items-center justify-center mb-3">
-        <User size={60} color="black" />
+      {/* Avatar círculo branco */}
+      <div className="mt-6 w-40 h-40 bg-white rounded-full flex items-center justify-center">
+        <User size={80} className="text-black" />
       </div>
 
-      <span className="text-xs font-semibold tracking-wide mb-10">LOJAS</span>
+      {/* Label LOJAS */}
+      <span className="mt-6 text-xs md:text-sm font-semibold tracking-[0.4em] uppercase">
+        LOJAS
+      </span>
 
-      <div className="w-64 h-56 relative flex items-center justify-center rounded-sm overflow-hidden">
-        {/* fundo em gradiente estático (substitua por <img> se adicionar o arquivo loja.jpg em src/img) */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-700 via-gray-900 to-black z-0" />
-        {/* overlay leve para contraste */}
-        <div className="absolute inset-0 " />
-
+      {/* Card Fazer Pedido */}
+      <div className="mt-10 w-[300px] h-[220px] relative rounded-md overflow-hidden border border-white/30">
         <img
           src="/img/pedido.png"
-          alt="Loja"
-          className="absolute inset-0 w-full h-full object-cover z-0"
+          alt="Fazer pedido"
+          className="absolute inset-0 w-full h-full object-cover"
         />
-        {/* texto por cima */}
-        <span className="relative text-lg font-extrabold text-center leading-tight z-20 text-white">
-          FAZER <br />PEDIDO
-        </span>
-      </div>
-
-      <div className="mt-12 flex gap-4">
-        <Link
-          to="/"
-          className="px-4 py-2 border border-white/40 rounded text-sm hover:bg-white/10 transition"
-        >
-          voltar
-        </Link>
-        <Link
-          to="/sesc"
-          className="px-4 py-2 border border-white/40 rounded text-sm hover:bg-white/10 transition"
-        >
-          sesc
-        </Link>
-        <Link
-          to="/senac"
-          className="px-4 py-2 border border-white/40 rounded text-sm hover:bg-white/10 transition"
-        >
-          senac
-        </Link>
+        <div className="absolute inset-0 bg-black/55" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-[18px] md:text-[20px] font-extrabold leading-tight text-white tracking-wide text-center">
+            FAZER
+            <br />
+            PEDIDO
+          </span>
+        </div>
       </div>
     </div>
   );

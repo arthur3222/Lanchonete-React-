@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function SenacLogo({ className = "" }) {
   return (
@@ -13,6 +13,11 @@ function SenacLogo({ className = "" }) {
 }
 
 export default function SenacLogin() {
+  const navigate = useNavigate();
+  const handleEnter = () => {
+    // validações poderiam ir aqui
+    navigate("/senac/lojas");
+  };
   return (
     <div className="relative min-h-screen w-full bg-[#FF7700] text-white overflow-hidden">
       <div className="min-h-screen w-full flex flex-col items-center justify-center gap-10 px-4">
@@ -53,6 +58,7 @@ export default function SenacLogin() {
 
       <button
         type="button"
+        onClick={handleEnter}
         className="fixed bottom-6 right-8 bg-white text-[#FF7700] hover:bg-white/90 font-bold px-10 py-3 rounded text-lg"
       >
         ENTRAR
