@@ -16,18 +16,25 @@ export default function Lojas() {
       <span className="text-xs font-semibold tracking-wide mb-10">LOJAS</span>
 
       <div className="w-64 h-56 relative flex items-center justify-center rounded-sm overflow-hidden">
-        {/* fundo em gradiente estático (substitua por <img> se adicionar o arquivo loja.jpg em src/img) */}
+        {/* fundo em gradiente estático (aparece se a imagem não carregar) */}
         <div className="absolute inset-0 bg-gradient-to-br from-gray-700 via-gray-900 to-black z-0" />
-        {/* overlay leve para contraste */}
-        <div className="absolute inset-0 " />
 
+        {/* imagem de fundo (coloque em public/img/pedido.png) - se estiver em src/img, importe acima e use src={pedidoImg} */}
         <img
           src="/img/pedido.png"
           alt="Loja"
-          className="absolute inset-0 w-full h-full object-cover z-0"
+          className="absolute inset-0 w-full h-full object-cover z-10"
+          onError={(e) => {
+            // se falhar no carregamento, esconda a <img> para mostrar o gradiente
+            e.currentTarget.style.display = "none";
+          }}
         />
+
+        {/* overlay leve para contraste sobre a imagem */}
+        <div className="absolute inset-0 bg-black/30 z-20" />
+
         {/* texto por cima */}
-        <span className="relative text-lg font-extrabold text-center leading-tight z-20 text-white">
+        <span className="relative text-lg font-extrabold text-center leading-tight z-30 text-white">
           FAZER <br />PEDIDO
         </span>
       </div>
