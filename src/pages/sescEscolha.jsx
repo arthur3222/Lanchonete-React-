@@ -29,26 +29,26 @@ function SescLogo({ className = "" }) {
 export default function SescEscolha() {
   return (
     <div className="relative min-h-screen w-full bg-[#0B4A80] text-white overflow-hidden">
-      <div className="min-h-screen w-full flex flex-col items-center justify-center gap-10 px-4">
+      <div className="min-h-screen w-full flex flex-col items-center justify-center gap-14 px-4">
         {/* Logo maior */}
-        <div className="w-56 h-56 rounded-full border border-white/80 flex items-center justify-center">
-          <SescLogo className="w-32 h-32 text-white" />
+        <div className="w-64 h-64 rounded-full border border-white/80 flex items-center justify-center">
+          <SescLogo className="w-40 h-40 text-white" />
         </div>
 
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-wide">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-wide">
           SESC
         </h1>
 
-        <div className="flex flex-col items-center gap-5">
+        <div className="flex flex-col items-center gap-6">
           <Link
             to="/sesc/login"
-            className="w-[340px] md:w-[380px] lg:w-[420px] text-center px-6 py-3 md:py-4 rounded-md border border-white/60 bg-blue-800/60 hover:bg-blue-800/80 transition-colors text-lg md:text-xl font-semibold"
+            className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-blue-800/70 hover:bg-blue-800/90 transition-colors text-2xl md:text-3xl font-semibold"
           >
-            entrar
+            entra
           </Link>
           <Link
             to="/sesc/cadastro"
-            className="w-[340px] md:w-[380px] lg:w-[420px] text-center px-6 py-3 md:py-4 rounded-md border border-white/60 bg-blue-800/60 hover:bg-blue-800/80 transition-colors text-lg md:text-xl font-semibold"
+            className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-blue-800/70 hover:bg-blue-800/90 transition-colors text-2xl md:text-3xl font-semibold"
           >
             cadastrar
           </Link>

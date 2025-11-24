@@ -12,6 +12,10 @@ import SenacEscolha from "./pages/senacEscolha";
 import SenacLogin from "./pages/senacLogin";
 import SenacCadastro from "./pages/senacCadastro";
 import Lojas from "./pages/lojasesc";
+import LojasSenac from "./pages/lojasenac";
+import ProdutoDetalhe from "./components/Produto";
+import ProdutoSesc from "./pages/produtoSesc";
+import ProdutoSenac from "./pages/produtoSenac";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -25,6 +29,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/senac/login" element={<SenacLogin />} />
         <Route path="/senac/cadastro" element={<SenacCadastro />} />
         <Route path="/lojas" element={<Lojas />} />
+        <Route path="/senac/lojas" element={<LojasSenac />} />
+        <Route path="/produto/:id" element={<ProdutoDetalhe />} />
+        <Route path="/ProdutoSesc" element={<ProdutoSesc />} />
+        <Route path="/ProdutoSenac" element={<ProdutoSenac />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

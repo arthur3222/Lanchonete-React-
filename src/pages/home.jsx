@@ -15,25 +15,23 @@ export default function Home() {
         backgroundImage: `url(${bg})`,
       }}
     >
-
       <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/60 to-white/90 pointer-events-none" />
 
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-12">
         <div className="w-full max-w-6xl text-center">
           <div className="relative inline-block mb-8">
-            <h1 className="text-gray-900 text-3xl sm:text-4xl md:text-5xl font-extrabold relative z-10">
+            <h1 className="text-gray-900 text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-wide">
               Bem-vindo
             </h1>
-
           </div>
-
-          <div className="flex flex-col items-center justify-center gap-6 sm:gap-8 md:flex-row md:gap-16">
+          <div className="flex flex-col items-center justify-center gap-10 sm:gap-12 md:flex-row md:gap-24">
+            {/* SESC */}
             {hasRouter ? (
               <Link
                 to="/sesc"
                 aria-label="Ir para Sesc"
-                className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold focus:outline-none focus:ring-4 focus:ring-blue-300 transform transition-transform hover:scale-105
-                          w-40 sm:w-56 md:w-72 lg:w-96 aspect-square text-lg sm:text-2xl md:text-4xl"
+                className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold focus:outline-none focus:ring-4 focus:ring-blue-300 hover:scale-105 transition-transform
+                          w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl"
               >
                 <span className="uppercase">sesc</span>
               </Link>
@@ -41,19 +39,20 @@ export default function Home() {
               <a
                 href="/sesc"
                 aria-label="Ir para Sesc"
-                className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold focus:outline-none focus:ring-4 focus:ring-blue-300 transform transition-transform hover:scale-105
-                           w-40 sm:w-56 md:w-72 lg:w-96 aspect-square text-lg sm:text-2xl md:text-4xl"
+                className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold focus:outline-none focus:ring-4 focus:ring-blue-300 hover:scale-105 transition-transform
+                           w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl"
               >
                 <span className="uppercase">sesc</span>
               </a>
             )}
 
+            {/* SENAC */}
             {hasRouter ? (
               <Link
                 to="/senac"
                 aria-label="Ir para Senac"
-                className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold focus:outline-none focus:ring-4 focus:ring-blue-300 transform transition-transform hover:scale-105
-                           w-40 sm:w-56 md:w-72 lg:w-96 aspect-square text-lg sm:text-2xl md:text-4xl"
+                className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold focus:outline-none focus:ring-4 focus:ring-blue-300 hover:scale-105 transition-transform
+                           w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl"
               >
                 <span className="uppercase">senac</span>
               </Link>
@@ -61,8 +60,8 @@ export default function Home() {
               <a
                 href="/senac"
                 aria-label="Ir para Senac"
-                className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold focus:outline-none focus:ring-4 focus:ring-blue-300 transform transition-transform hover:scale-105
-                           w-40 sm:w-56 md:w-72 lg:w-96 aspect-square text-lg sm:text-2xl md:text-4xl"
+                className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold focus:outline-none focus:ring-4 focus:ring-blue-300 hover:scale-105 transition-transform
+                           w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl"
               >
                 <span className="uppercase">senac</span>
               </a>
