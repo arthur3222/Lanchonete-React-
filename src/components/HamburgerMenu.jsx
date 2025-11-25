@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function HamburgerMenu({ light = false }) {
   const [open, setOpen] = useState(false);
@@ -69,15 +69,13 @@ export default function HamburgerMenu({ light = false }) {
             </button>
         </div>
         <nav className="flex flex-col gap-2 px-4 py-4 text-sm">
-          <Link to="/" className="px-3 py-2 rounded hover:bg-white/10">Home</Link>
-          <Link to="/sesc" className="px-3 py-2 rounded hover:bg-white/10">Sesc</Link>
-          <Link to="/senac" className="px-3 py-2 rounded hover:bg-white/10">Senac</Link>
-          <Link to="/lojas" className="px-3 py-2 rounded hover:bg-white/10">Café Sesc</Link>
-          <Link to="/senac/lojas" className="px-3 py-2 rounded hover:bg-white/10">Café Senac</Link>
-          {/* Link de sair */}
-          <Link to="/" className="mt-2 px-3 py-2 rounded bg-red-600/60 hover:bg-red-600 text-white font-semibold transition">
-            Sair
-          </Link>
+          <div className="px-3 py-2 rounded">Home</div>
+          <div className="px-3 py-2 rounded">Sesc</div>
+          <div className="px-3 py-2 rounded">Senac</div>
+          <div className="px-3 py-2 rounded">Produtos Sesc</div>
+          <div className="px-3 py-2 rounded">Produtos Senac</div>
+          {/* Sair (estático) */}
+          <div className="mt-2 px-3 py-2 rounded bg-red-600/60 text-white font-semibold">Sair</div>
         </nav>
         <div className="mt-auto px-4 pb-6 text-xs opacity-60">
           <span>© {new Date().getFullYear()} Navegação</span>

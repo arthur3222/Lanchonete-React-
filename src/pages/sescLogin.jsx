@@ -31,7 +31,7 @@ export default function SescLogin() {
 
   const handleEnter = () => {
     // aqui poderia validar login antes
-    navigate("/lojas");
+    navigate("/ProdutoSesc"); // <-- alterado para ir à página de produtos do SESC
   };
 
   return (
@@ -50,7 +50,10 @@ export default function SescLogin() {
         {/* Formulário */}
         <form
           className="flex flex-col items-center gap-6 w-full max-w-xl"
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleEnter();
+          }} // <-- modificado: submeter navega
         >
           <span className="w-[400px] md:w-[460px] text-center bg-blue-800/90 text-white text-lg md:text-xl font-bold rounded-md py-3">
             e-mail
@@ -78,12 +81,7 @@ export default function SescLogin() {
           </button>
         </form>
 
-        <Link
-          to="/sesc/cadastro"
-          className="text-white/90 hover:text-white text-lg underline"
-        >
-          criar conta
-        </Link>
+        <div className="text-white/90 text-lg underline cursor-default">criar conta</div>
       </div>
 
       <button
@@ -94,12 +92,7 @@ export default function SescLogin() {
         ENTRAR
       </button>
 
-      <Link
-        to="/sesc"
-        className="absolute bottom-6 left-6 text-white/90 hover:text-white px-4 py-2 border border-white/40 rounded transition-colors"
-      >
-        voltar
-      </Link>
+      <div className="absolute bottom-6 left-6 text-white/90 px-4 py-2 border border-white/40 rounded">voltar</div>
     </div>
   );
 }

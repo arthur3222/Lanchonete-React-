@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useSearchParams, Link } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { getProdutoById } from "../data/produtos";
 import { useCart } from "./CartContext";
 
@@ -19,7 +19,7 @@ export default function ProdutoDetalhe() {
     return (
       <div style={styles.center}>
         <p style={styles.errorText}>Produto não encontrado</p>
-        <Link to={-1} style={styles.backButton}>Voltar</Link>
+        <div style={styles.backButton}>Voltar</div>
       </div>
     );
   }
@@ -139,15 +139,14 @@ export function CardProduto({ img, nome, preco, produtoId, store }) {
     return null;
   })();
 
-  const query = store ? `?store=${store}` : "";
   return (
-    <Link to={`/produto/${produtoId}${query}`} style={styles.card}>
+    <div style={styles.card} title={nome}>
       {imageSrc && <img src={imageSrc} alt={nome} style={styles.cardImage} />}
       <div style={{ padding: 8, textAlign: "center" }}>
         <p style={styles.cardNome} title={nome}>{nome}</p>
         <p style={styles.cardPreco}>{priceText}</p>
       </div>
-    </Link>
+    </div>
   );
 }
 

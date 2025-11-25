@@ -16,7 +16,7 @@ export default function SenacLogin() {
   const navigate = useNavigate();
   const handleEnter = () => {
     // validações poderiam ir aqui
-    navigate("/senac/lojas");
+    navigate("/ProdutoSenac"); // <-- alterado para ir à página de produtos do SENAC
   };
   return (
     <div className="relative min-h-screen w-full bg-[#FF7700] text-white overflow-hidden">
@@ -29,7 +29,10 @@ export default function SenacLogin() {
           ENTRAR
         </h1>
 
-        <form className="flex flex-col items-center gap-4 w-full max-w-md" onSubmit={(e) => e.preventDefault()}>
+        <form
+          className="flex flex-col items-center gap-4 w-full max-w-md"
+          onSubmit={(e) => { e.preventDefault(); handleEnter(); }} // <-- modificado: submeter navega
+        >
           <span className="w-[340px] md:w-[380px] text-center bg-white/25 text-white text-base md:text-lg font-bold rounded-md py-2">
             e-mail
           </span>
@@ -51,9 +54,7 @@ export default function SenacLogin() {
           <button type="submit" className="sr-only">enviar</button>
         </form>
 
-        <Link to="/senac/cadastro" className="text-white/90 hover:text-white text-base underline">
-          criar conta
-        </Link>
+        <div className="text-white/90 text-base underline cursor-default">criar conta</div>
       </div>
 
       <button
@@ -64,12 +65,7 @@ export default function SenacLogin() {
         ENTRAR
       </button>
 
-      <Link
-        to="/senac"
-        className="absolute bottom-6 left-6 text-white/90 hover:text-white px-4 py-2 border border-white/40 rounded transition-colors"
-      >
-        voltar
-      </Link>
+      <div className="absolute bottom-6 left-6 text-white/90 px-4 py-2 border border-white/40 rounded">voltar</div>
     </div>
   );
 }

@@ -25,24 +25,12 @@ export default function SenacEscolha() {
           SENAC
         </h1>
         <div className="flex flex-col items-center gap-6">
-          <Link
-            to="/senac/login"
-            className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-white/25 hover:bg-white/40 transition-colors text-2xl md:text-3xl font-semibold"
-          >
+          <div className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-white/25 transition-colors text-2xl md:text-3xl font-semibold cursor-default opacity-95">
             entrar
-          </Link>
-          <Link
-            to="/senac/cadastro"
-            className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-white/25 hover:bg-white/40 transition-colors text-2xl md:text-3xl font-semibold"
-          >
+          </div>
+          <div className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-white/25 transition-colors text-2xl md:text-3xl font-semibold cursor-default opacity-95">
             cadastrar
-          </Link>
-          <Link
-            to="/senac/login"
-            className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-white/25 hover:bg-white/40 transition-colors text-2xl md:text-3xl font-semibold"
-          >
-            entra
-          </Link>
+          </div>
         </div>
       </div>
 
