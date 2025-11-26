@@ -31,7 +31,7 @@ export default function SescLogin() {
 
   const handleEnter = () => {
     // aqui poderia validar login antes
-    navigate("/ProdutoSesc"); // <-- alterado para ir à página de produtos do SESC
+    navigate("/lojasesc"); // navegar para página de lojas do SESC após login
   };
 
   return (
@@ -53,7 +53,7 @@ export default function SescLogin() {
           onSubmit={(e) => {
             e.preventDefault();
             handleEnter();
-          }} // <-- modificado: submeter navega
+          }} // <-- submeter navega
         >
           <span className="w-[400px] md:w-[460px] text-center bg-blue-800/90 text-white text-lg md:text-xl font-bold rounded-md py-3">
             e-mail
@@ -81,18 +81,29 @@ export default function SescLogin() {
           </button>
         </form>
 
-        <div className="text-white/90 text-lg underline cursor-default">criar conta</div>
+        <Link
+          to="/sesc/cadastro"
+          className="text-white/90 text-lg underline hover:opacity-90"
+        >
+          criar conta
+        </Link>
       </div>
 
       <button
         type="button"
-        onClick={handleEnter} // navega para /lojas
+        onClick={handleEnter} // navega para lojasesc
         className="fixed bottom-8 right-10 bg-orange-500 hover:bg-orange-600 text-white font-bold px-12 py-4 rounded text-xl shadow-lg"
       >
         ENTRAR
       </button>
 
-      <div className="absolute bottom-6 left-6 text-white/90 px-4 py-2 border border-white/40 rounded">voltar</div>
+      <Link
+        to="/sesc"
+        className="absolute bottom-6 left-6 text-white/90 px-4 py-2 border border-white/40 rounded hover:text-white"
+        aria-label="Voltar para Sesc"
+      >
+        voltar
+      </Link>
     </div>
   );
 }

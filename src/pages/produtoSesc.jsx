@@ -38,14 +38,24 @@ export default function ProdutoSesc() {
         accent="bg-[#003a73]"
       />
 
-      <header className="h-20 flex items-center px-5">
+      <header className="h-20 flex items-center px-5 relative">
         <button
           onClick={() => setOpen(true)}
+<<<<<<< HEAD
+          className="absolute left-5 top-1/2 -translate-y-1/2 z-30 w-10 h-10 flex items-center justify-center rounded-md border border-white/20 bg-black/20 hover:bg-black/30"
+=======
           className="text-white text-3xl px-3 py-2 rounded hover:bg-white/10"
+>>>>>>> 4f30d0a141c3979a641ffe170faf928129f8962d
           aria-label="Abrir menu"
         >
-          ☰
+          <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 6h18M3 12h18M3 18h18" />
+          </svg>
         </button>
+<<<<<<< HEAD
+        <h1 className="ml-14 text-2xl font-extrabold tracking-wide">Lanchonete</h1>
+=======
+>>>>>>> 4f30d0a141c3979a641ffe170faf928129f8962d
       </header>
 
       <main className="px-6 pb-24 max-w-6xl mx-auto">
@@ -73,12 +83,37 @@ export default function ProdutoSesc() {
         ))}
       </main>
 
+<<<<<<< HEAD
       <Link
         to="/"
         className="fixed bottom-5 left-5 bg-white/15 hover:bg-white/25 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold"
       >
         voltar
       </Link>
+=======
+<<<<<<< HEAD
+      <Link
+        to="/lojasesc"
+        className="fixed bottom-5 left-5 bg-white/15 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold hover:bg-white/20"
+        aria-label="Voltar para Lojas Sesc"
+      >
+        voltar
+      </Link>
+=======
+<<<<<<< HEAD
+       <Link
+         to="/"
+         className="fixed bottom-5 left-5 bg-white/15 hover:bg-white/25 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold"
+       >
+         voltar
+       </Link>
+     </div>
+   );
+ }
+=======
+      <div className="fixed bottom-5 left-5 bg-white/15 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold">voltar</div>
+>>>>>>> 4f30d0a141c3979a641ffe170faf928129f8962d
+>>>>>>> 758e0468464b7e591210941d5a35d6e80e509992
     </div>
   );
 }
