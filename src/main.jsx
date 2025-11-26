@@ -16,6 +16,7 @@ import LojasSenac from "./pages/lojasenac";
 import ProdutoDetalhe from "./components/Produto";
 import ProdutoSesc from "./pages/produtoSesc";
 import ProdutoSenac from "./pages/produtoSenac";
+import ConcluirPedido from "./pages/concluirPedido"; // <-- nova rota
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -31,6 +32,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/lojas" element={<Lojas />} />
         <Route path="/senac/lojas" element={<LojasSenac />} />
         <Route path="/produto/:id" element={<ProdutoDetalhe />} />
+        <Route path="/concluir-pedido" element={<ConcluirPedido />} />
         <Route path="/ProdutoSesc" element={<ProdutoSesc />} />
         <Route path="/ProdutoSenac" element={<ProdutoSenac />} />
         <Route path="*" element={<Navigate to="/" replace />} />

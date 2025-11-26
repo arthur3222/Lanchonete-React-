@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useSearchParams, Link } from "react-router-dom";
+import { useParams, useSearchParams, Link, useNavigate } from "react-router-dom";
 import { getProdutoById } from "../data/produtos";
 import { useCart } from "./CartContext";
 
@@ -7,6 +7,7 @@ import { useCart } from "./CartContext";
 export default function ProdutoDetalhe() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate(); // <-- ADICIONADO
   const store = searchParams.get("store");
   const productId = id;
   const produto = productId ? getProdutoById(productId) : undefined;
@@ -108,7 +109,8 @@ export default function ProdutoDetalhe() {
               try {
                 const loja = (store === "sesc" || store === "senac") ? store : "sesc";
                 addToCart(loja, { ...produto, quantidade: qtd });
-                window.alert(`${produto.nome || "Produto"} x${qtd} adicionado ao carrinho!`);
+                // após adicionar, navegar para a página de confirmação (Alert)
+                navigate("/concluir-pedido");
               } catch (e) {
                 console.warn(e);
                 window.alert("Erro ao adicionar.");

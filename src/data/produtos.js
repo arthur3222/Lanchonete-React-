@@ -1,40 +1,65 @@
 export const produtos = {
+  Comidas: [
+    {
+      id: "Misto-quente",
+      nome: "Misto-quente",
+      preco: 5,
+      img: "../img/misto-quente.jpg",
+    },
+    {
+      id: "Esfirra",
+      nome: "Esfirra",
+      preco: 5,
+      img: "",
+    },
+    {
+      id: "Pão de Queijo",
+      nome: "Esfirra",
+      preco: 4,
+      img: "",
+    }
+  ],
   Bebidas: [
     {
-      id: "cafe",
-      nome: "Café",
-      preco: 5,
-      descricao: "Café passado quente.",
-      ingredientes: ["Água", "Pó de café"],
-      img: "https://via.placeholder.com/300x200?text=Cafe",
-    },
-    {
-      id: "suco-laranja",
-      nome: "Suco de Laranja",
-      preco: 8.5,
-      descricao: "Suco natural de laranja.",
-      ingredientes: ["Laranja"],
-      img: "https://via.placeholder.com/300x200?text=Suco",
-    },
-  ],
-  Lanches: [
-    {
-      id: "pao-queijo",
-      nome: "Pão de Queijo",
+      id: "Suco",
+      nome: "Suco",
       preco: 4,
-      descricao: "Pão de queijo mineiro.",
-      ingredientes: ["Queijo", "Polvilho"],
-      img: "https://via.placeholder.com/300x200?text=Pao+de+Queijo",
+      img: "",
     },
     {
-      id: "mistao",
-      nome: "Misto Quente",
-      preco: 9,
-      descricao: "Pão com queijo e presunto quente.",
-      ingredientes: ["Pão", "Queijo", "Presunto"],
-      img: "https://via.placeholder.com/300x200?text=Misto",
+      id: "Café",
+      nome: "Café",
+      preco: 4,
+      img: "",
     },
-  ],
+    {
+      id: "Cappuccino",
+      nome: "Cappuccino",
+      preco: 4,
+      img: "",
+    },
+    ],
+    Sobremesas: [
+      {
+        id: "Salada de frutas",
+        nome: "Salada de frutas",
+        preco: 4,
+        img: "",
+        },
+        {
+          id: "Bolo",
+          nome: "Bolo",
+          preco: 4,
+          img: "",
+        },
+        {
+          id: "Pavê",
+          nome: "Pávê",
+          preco: 4,
+          img: "",
+        }
+
+    ]
 };
 
 export const produtosMap = Object.freeze(
