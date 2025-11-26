@@ -1,5 +1,16 @@
 import React, { useState } from "react";
 import { User } from "lucide-react";
+<<<<<<< HEAD
+import { useNavigate } from "react-router-dom";
+import HamburgerMenu from "../components/HamburgerMenu";
+
+export default function LojasSenac() {
+  const navigate = useNavigate();
+  return (
+    <div className="relative min-h-screen w-full bg-[#FF7700] text-white flex flex-col items-center justify-center px-4">
+      <HamburgerMenu /> {/* componente reutilizável */}
+      <h1 className="mt-0 text-sm md:text-base font-bold tracking-[0.3em] uppercase">
+=======
 import { Link } from "react-router-dom"; // <-- adicionado
 import SideMenu from "../components/SideMenu"; // novo import
 
@@ -44,6 +55,7 @@ export default function LojasSenac() {
       </button>
 
       <h1 className="mt-2 text-sm md:text-base font-bold tracking-[0.3em] uppercase">
+>>>>>>> 758e0468464b7e591210941d5a35d6e80e509992
         SEJA BEM VINDO
       </h1>
 

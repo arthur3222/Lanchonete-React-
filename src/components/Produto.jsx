@@ -1,6 +1,11 @@
 import React from "react";
 import { useParams, useSearchParams, Link, useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import { produtos } from "../data/produtos";
+=======
+import { getProdutoById } from "../data/produtos";
+import { useCart } from "./CartContext";
+>>>>>>> 6b1698639184a748b2f631a0a79bb7b43f1bdeb6
 
 // CardProduto: tile reutilizável
 export function CardProduto({ img, nome, preco, produtoId, store = "sesc" }) {

@@ -73,6 +73,7 @@ export default function ProdutoSesc() {
 				))}
 			</main>
 
+<<<<<<< HEAD
 			<Link
 				to="/lojasesc"
 				className="fixed bottom-5 left-5 bg-white/15 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold hover:bg-white/20"
@@ -82,4 +83,39 @@ export default function ProdutoSesc() {
 			</Link>
 		</div>
 	);
+=======
+<<<<<<< HEAD
+      <Link
+        to="/"
+        className="fixed bottom-5 left-5 bg-white/15 hover:bg-white/25 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold"
+      >
+        voltar
+      </Link>
+=======
+<<<<<<< HEAD
+      <Link
+        to="/lojasesc"
+        className="fixed bottom-5 left-5 bg-white/15 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold hover:bg-white/20"
+        aria-label="Voltar para Lojas Sesc"
+      >
+        voltar
+      </Link>
+=======
+<<<<<<< HEAD
+       <Link
+         to="/"
+         className="fixed bottom-5 left-5 bg-white/15 hover:bg-white/25 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold"
+       >
+         voltar
+       </Link>
+     </div>
+   );
+ }
+=======
+      <div className="fixed bottom-5 left-5 bg-white/15 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold">voltar</div>
+>>>>>>> 4f30d0a141c3979a641ffe170faf928129f8962d
+>>>>>>> 758e0468464b7e591210941d5a35d6e80e509992
+    </div>
+  );
+>>>>>>> 6b1698639184a748b2f631a0a79bb7b43f1bdeb6
 }
