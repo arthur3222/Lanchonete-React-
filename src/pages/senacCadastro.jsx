@@ -1,6 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import HamburgerMenu from "../components/HamburgerMenu";
+import { useNavigate, Link } from "react-router-dom";
 
 function SenacLogo({ className = "" }) {
   return (
@@ -18,7 +17,16 @@ export default function SenacCadastro() {
 
   return (
     <div className="relative min-h-screen w-full bg-[#FF7700] text-white overflow-hidden pb-24 md:pb-32">
-      <HamburgerMenu />
+      {/* hamburger padronizado (navega para /) */}
+      <Link
+        to="/"
+        aria-label="Menu"
+        className="absolute top-4 left-4 z-30 w-10 h-10 flex items-center justify-center rounded-md border border-white/20 bg-black/20 hover:bg-black/30"
+      >
+        <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 6h18M3 12h18M3 18h18" />
+        </svg>
+      </Link>
       <div className="min-h-screen w-full flex flex-col items-center justify-center gap-14 px-4">
         <div className="w-64 h-64 rounded-full border border-white/80 flex items-center justify-center">
           <SenacLogo className="w-40 h-40 text-white" />
@@ -78,12 +86,18 @@ export default function SenacCadastro() {
       <button
         type="button"
         className="fixed bottom-8 right-10 bg-white text-[#FF7700] hover:bg-white/90 font-bold px-12 py-4 rounded text-xl shadow-lg"
-        onClick={() => navigate("/ProdutoSenac")}
+        onClick={() => navigate("/lojasenac")}
       >
         ENTER
       </button>
 
-      <div className="absolute bottom-6 left-6 text-white/90 px-4 py-2 border border-white/40 rounded">voltar</div>
+      <Link
+        to="/senac"
+        aria-label="Voltar para Senac"
+        className="absolute bottom-6 left-6 text-white/90 px-4 py-2 border border-white/40 rounded hover:text-white"
+      >
+        voltar
+      </Link>
     </div>
   );
 }

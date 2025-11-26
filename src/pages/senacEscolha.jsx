@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import HamburgerMenu from "../components/HamburgerMenu";
 
 function SenacLogo({ className = "" }) {
   return (
@@ -16,7 +15,6 @@ function SenacLogo({ className = "" }) {
 export default function SenacEscolha() {
   return (
     <div className="relative min-h-screen w-full bg-[#FF7700] text-white overflow-hidden">
-      <HamburgerMenu />
       <div className="min-h-screen w-full flex flex-col items-center justify-center gap-14 px-4">
         <div className="w-64 h-64 rounded-full border border-white/80 flex items-center justify-center">
           <SenacLogo className="w-40 h-40 text-white" />
@@ -25,15 +23,20 @@ export default function SenacEscolha() {
           SENAC
         </h1>
         <div className="flex flex-col items-center gap-6">
-          <div className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-white/25 transition-colors text-2xl md:text-3xl font-semibold cursor-default opacity-95">
+          <Link
+            to="/senac/login"
+            className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-white/25 hover:bg-white/40 transition-colors text-2xl md:text-3xl font-semibold"
+          >
             entrar
-          </div>
-          <div className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-white/25 transition-colors text-2xl md:text-3xl font-semibold cursor-default opacity-95">
+          </Link>
+          <Link
+            to="/senac/cadastro"
+            className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-white/25 hover:bg-white/40 transition-colors text-2xl md:text-3xl font-semibold"
+          >
             cadastrar
-          </div>
+          </Link>
         </div>
       </div>
-
       <Link
         to="/"
         className="absolute bottom-6 left-6 text-white/90 hover:text-white px-4 py-2 border border-white/40 rounded transition-colors"

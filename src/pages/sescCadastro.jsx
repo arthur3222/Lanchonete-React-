@@ -102,13 +102,19 @@ export default function SescCadastro() {
       <button
         type="button"
         className="fixed bottom-8 right-10 bg-orange-500 hover:bg-orange-600 text-white font-bold px-12 py-4 rounded text-xl shadow-lg"
-        onClick={() => navigate("/ProdutoSesc")}
+        onClick={() => navigate("/lojasesc")}
       >
         ENTER
       </button>
 
       {/* Voltar */}
-      <div className="absolute bottom-6 left-6 text-white/90 px-4 py-2 border border-white/40 rounded">voltar</div>
+      <Link
+        to="/sesc"
+        aria-label="Voltar para Sesc"
+        className="absolute bottom-6 left-6 text-white/90 px-4 py-2 border border-white/40 rounded hover:text-white"
+      >
+        voltar
+      </Link>
     </div>
   );
 }

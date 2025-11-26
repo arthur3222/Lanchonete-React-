@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function SescLogo({ className = "" }) {
   return (
@@ -39,12 +40,18 @@ export default function SescEscolha() {
         </h1>
 
         <div className="flex flex-col items-center gap-6">
-          <div className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-blue-800/70 transition-colors text-2xl md:text-3xl font-semibold cursor-default opacity-95">
+          <Link
+            to="/sesc/login"
+            className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-blue-800/70 hover:bg-blue-800/90 transition-colors text-2xl md:text-3xl font-semibold"
+          >
             entra
-          </div>
-          <div className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-blue-800/70 transition-colors text-2xl md:text-3xl font-semibold cursor-default opacity-95">
+          </Link>
+          <Link
+            to="/sesc/cadastro"
+            className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-blue-800/70 hover:bg-blue-800/90 transition-colors text-2xl md:text-3xl font-semibold"
+          >
             cadastrar
-          </div>
+          </Link>
         </div>
       </div>
 
