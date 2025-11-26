@@ -1,189 +1,76 @@
 import React from "react";
-<<<<<<< HEAD
 import { useParams, useSearchParams, Link, useNavigate } from "react-router-dom";
-=======
-import { useParams, useSearchParams } from "react-router-dom";
->>>>>>> 874833380f9ad48a5e7fa4d6fe9647e539ea745e
-import { getProdutoById } from "../data/produtos";
-import { useCart } from "./CartContext";
+import { produtos } from "../data/produtos";
 
-// Componente de detalhe
+// CardProduto: tile reutilizável
+export function CardProduto({ img, nome, preco, produtoId, store = "sesc" }) {
+	// ...existing visual style could be adjusted no seu CSS...
+	return (
+		<Link to={`/produto/${produtoId}?store=${store}`} className="flex flex-col items-center gap-2 text-center">
+			<div className="w-28 h-28 md:w-32 md:h-32 bg-white rounded-sm overflow-hidden flex items-center justify-center shadow-sm">
+				<img src={img} alt={nome} className="w-full h-full object-cover" />
+			</div>
+			<div className="text-xs font-extrabold uppercase">{nome}</div>
+			<div className="text-xs">R$ {Number(preco).toFixed(2).replace(".", ",")}</div>
+		</Link>
+	);
+}
+
+// ProdutoDetalhe: página do produto (rota /produto/:id)
 export default function ProdutoDetalhe() {
-  const { id } = useParams();
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate(); // <-- ADICIONADO
-  const store = searchParams.get("store");
-  const productId = id;
-  const produto = productId ? getProdutoById(productId) : undefined;
-  const { addToCart } = useCart();
-  const [qtd, setQtd] = React.useState(1);
-  const [editing, setEditing] = React.useState(false);
-  const [temp, setTemp] = React.useState(String(qtd));
+	const { id } = useParams();
+	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
+	const store = searchParams.get("store") || "sesc";
 
-  if (!produto) {
-    return (
-      <div style={styles.center}>
-        <p style={styles.errorText}>Produto não encontrado</p>
-        <div style={styles.backButton}>Voltar</div>
-      </div>
-    );
-  }
+	// procura produto por id nas categorias
+	let item = null;
+	for (const cat of Object.keys(produtos)) {
+		const found = produtos[cat].find(p => String(p.id) === String(id));
+		if (found) {
+			item = found;
+			break;
+		}
+	}
 
-  const imageSource = (() => {
-    if (!produto.img) return null;
-    if (typeof produto.img === "string") return produto.img;
-    if (typeof produto.img === "object" && produto.img.uri) return produto.img.uri;
-    return null;
-  })();
+	if (!item) {
+		return (
+			<div className="min-h-screen flex items-center justify-center">
+				<span className="text-center">Produto não encontrado.</span>
+			</div>
+		);
+	}
 
-  return (
-    <div style={styles.container}>
-      <div style={styles.scrollContent}>
-        {imageSource ? (
-          <img src={imageSource} alt={produto.nome || "Produto"} style={styles.imagem} />
-        ) : (
-          <div style={{ ...styles.imagem, ...styles.noImage }}>
-            <span style={styles.noImageText}>Sem imagem</span>
-          </div>
-        )}
+	const voltarPath = store === "sesc" ? "/ProdutoSesc" : "/ProdutoSenac";
 
-        <div style={styles.content}>
-          <div style={styles.rowBetween}>
-            <h2 style={styles.nome}>{produto.nome || "Produto"}</h2>
-            <span style={styles.preco}>
-              R$ {Number(produto.preco || 0).toFixed(2)}
-            </span>
-          </div>
-
-          <div style={styles.separator} />
-
-            <h3 style={styles.descricaoTitle}>Descrição</h3>
-            <p style={styles.descricao}>{produto.descricao || "Sem descrição."}</p>
-
-            {Array.isArray(produto.ingredientes) && produto.ingredientes.length > 0 && (
-              <div>
-                <h4 style={styles.ingredientesTitle}>Ingredientes</h4>
-                {produto.ingredientes.map((ing, i) => (
-                  <p key={i} style={styles.ingrediente}>• {ing}</p>
-                ))}
-              </div>
-            )}
-        </div>
-      </div>
-
-      <div style={styles.footer}>
-        <div style={styles.footerRow}>
-          {!editing ? (
-            <button
-              style={styles.qtyButton}
-              onClick={() => {
-                setTemp(String(qtd));
-                setEditing(true);
-              }}
-            >
-              Definir quantidade
-            </button>
-          ) : (
-            <div style={styles.qtyRow}>
-              <input
-                value={temp}
-                onChange={e => setTemp(e.target.value)}
-                style={styles.qtyInput}
-                placeholder="Qtd"
-                maxLength={2}
-              />
-              <button
-                style={styles.qtyOk}
-                onClick={() => {
-                  const n = Math.max(1, Math.min(99, parseInt(temp, 10) || 1));
-                  setQtd(n);
-                  setEditing(false);
-                }}
-              >OK</button>
-              <button
-                style={styles.qtyCancel}
-                onClick={() => setEditing(false)}
-              >Cancelar</button>
-            </div>
-          )}
-
-          <button
-            style={{ ...styles.buyButton, flex: 1 }}
-            onClick={() => {
-              try {
-                const loja = (store === "sesc" || store === "senac") ? store : "sesc";
-                addToCart(loja, { ...produto, quantidade: qtd });
-                // após adicionar, navegar para a página de confirmação (Alert)
-                navigate("/concluir-pedido");
-              } catch (e) {
-                console.warn(e);
-                window.alert("Erro ao adicionar.");
-              }
-            }}
-          >
-            Adicionar ao Carrinho
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<div className="min-h-screen bg-white/5 text-gray-900 p-6">
+			<div className="max-w-3xl mx-auto bg-white/5 p-6 rounded-md shadow-md">
+				<div className="flex gap-6">
+					<div className="w-40 h-40 bg-white rounded overflow-hidden flex items-center justify-center">
+						<img src={item.img} alt={item.nome} className="w-full h-full object-cover" />
+					</div>
+					<div className="flex-1">
+						<h1 className="text-2xl font-bold">{item.nome}</h1>
+						<p className="mt-2 text-lg">R$ {Number(item.preco).toFixed(2).replace(".", ",")}</p>
+						<p className="mt-4 text-sm text-white/80">{item.descricao || ""}</p>
+						<div className="mt-6 flex gap-3">
+							<button
+								onClick={() => navigate(voltarPath)}
+								className="px-4 py-2 bg-white/10 rounded hover:bg-white/20"
+							>
+								Voltar
+							</button>
+							<button
+								onClick={() => alert("Adicionar ao carrinho (implementação necessária)")}
+								className="px-4 py-2 bg-green-600 text-white rounded hover:brightness-95"
+							>
+								Adicionar ao carrinho
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }
-
-// Card de produto (lista)
-export function CardProduto({ img, nome, preco, produtoId, store }) {
-  if (!produtoId) return null;
-
-  const priceText =
-    preco !== undefined && preco !== null && !Number.isNaN(Number(preco))
-      ? `R$ ${new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Number(preco))}`
-      : "--";
-
-  const imageSrc = (() => {
-    if (!img) return null;
-    if (typeof img === "string") return img;
-    if (typeof img === "object" && img.uri) return img.uri;
-    return null;
-  })();
-
-  return (
-    <div style={styles.card} title={nome}>
-      {imageSrc && <img src={imageSrc} alt={nome} style={styles.cardImage} />}
-      <div style={{ padding: 8, textAlign: "center" }}>
-        <p style={styles.cardNome} title={nome}>{nome}</p>
-        <p style={styles.cardPreco}>{priceText}</p>
-      </div>
-    </div>
-  );
-}
-
-const styles = {
-  container: { position: "relative", minHeight: "100vh", background: "#ffffff" },
-  scrollContent: { paddingBottom: 140, maxWidth: 900, margin: "0 auto" },
-  center: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "60vh", gap: 16 },
-  errorText: { color: "#666", fontSize: 18, marginBottom: 12 },
-  backButton: { background: "#004586", padding: "10px 20px", color: "#fff", borderRadius: 8, textDecoration: "none", fontWeight: 600 },
-  imagem: { width: "100%", height: 320, backgroundColor: "#f6f6f6", objectFit: "contain" },
-  noImage: { display: "flex", alignItems: "center", justifyContent: "center" },
-  noImageText: { color: "#999" },
-  content: { padding: 20 },
-  nome: { fontSize: 24, fontWeight: 700, color: "#222", margin: 0 },
-  preco: { fontSize: 18, fontWeight: 700, color: "#2E7D32" },
-  rowBetween: { display: "flex", justifyContent: "space-between", alignItems: "center" },
-  separator: { height: 1, backgroundColor: "#e0e0e0", margin: "16px 0" },
-  descricaoTitle: { fontSize: 18, fontWeight: 600, margin: "8px 0" },
-  descricao: { fontSize: 16, color: "#555", lineHeight: "22px", margin: "0 0 16px" },
-  ingredientesTitle: { fontSize: 16, fontWeight: 600, margin: "8px 0" },
-  ingrediente: { fontSize: 14, color: "#666", margin: "0 0 4px" },
-  footer: { position: "fixed", bottom: 0, left: 0, right: 0, background: "#fff", padding: 16, borderTop: "1px solid #e0e0e0" },
-  footerRow: { display: "flex", alignItems: "center", gap: 12 },
-  buyButton: { background: "#004586", padding: "14px 16px", borderRadius: 8, color: "#fff", fontWeight: 600, border: "none", cursor: "pointer" },
-  qtyButton: { background: "#ff5252", padding: "12px 14px", borderRadius: 8, color: "#fff", fontWeight: 700, border: "none", cursor: "pointer" },
-  qtyRow: { display: "flex", alignItems: "center", gap: 8 },
-  qtyInput: { width: 64, height: 40, background: "#f3f3f3", borderRadius: 6, padding: "0 8px", border: "1px solid #ddd", fontSize: 16 },
-  qtyOk: { background: "#28a745", padding: "10px 14px", borderRadius: 8, color: "#fff", fontWeight: 700, border: "none", cursor: "pointer" },
-  qtyCancel: { background: "#ccc", padding: "10px 14px", borderRadius: 8, color: "#333", fontWeight: 700, border: "none", cursor: "pointer" },
-  card: { width: "48%", background: "#fff", borderRadius: 10, marginBottom: 12, overflow: "hidden", textDecoration: "none", color: "inherit", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" },
-  cardImage: { width: "100%", height: 120, objectFit: "cover" },
-  cardNome: { margin: "6px 0 0", fontWeight: 700, color: "#222", fontSize: 14, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
-  cardPreco: { margin: "4px 0 0", color: "#444", fontSize: 13 },
-};
