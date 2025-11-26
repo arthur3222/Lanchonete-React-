@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 function SescLogo({ className = "" }) {
   return (
@@ -26,6 +27,8 @@ function SescLogo({ className = "" }) {
 }
 
 export default function SescCadastro() {
+  const navigate = useNavigate();
+
   return (
     <div className="relative min-h-screen w-full bg-[#0B4A80] text-white overflow-hidden pb-24 md:pb-32">
       <div className="min-h-screen w-full flex flex-col items-center justify-center gap-14 px-4">
@@ -99,17 +102,13 @@ export default function SescCadastro() {
       <button
         type="button"
         className="fixed bottom-8 right-10 bg-orange-500 hover:bg-orange-600 text-white font-bold px-12 py-4 rounded text-xl shadow-lg"
+        onClick={() => navigate("/ProdutoSesc")}
       >
         ENTER
       </button>
 
       {/* Voltar */}
-      <a
-        href="/sesc"
-        className="absolute bottom-6 left-6 text-white/90 hover:text-white px-4 py-2 border border-white/40 rounded transition-colors"
-      >
-        voltar
-      </a>
+      <div className="absolute bottom-6 left-6 text-white/90 px-4 py-2 border border-white/40 rounded">voltar</div>
     </div>
   );
 }

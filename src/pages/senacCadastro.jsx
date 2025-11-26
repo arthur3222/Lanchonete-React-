@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import HamburgerMenu from "../components/HamburgerMenu";
 
 function SenacLogo({ className = "" }) {
@@ -13,6 +14,8 @@ function SenacLogo({ className = "" }) {
 }
 
 export default function SenacCadastro() {
+  const navigate = useNavigate();
+
   return (
     <div className="relative min-h-screen w-full bg-[#FF7700] text-white overflow-hidden pb-24 md:pb-32">
       <HamburgerMenu />
@@ -75,16 +78,12 @@ export default function SenacCadastro() {
       <button
         type="button"
         className="fixed bottom-8 right-10 bg-white text-[#FF7700] hover:bg-white/90 font-bold px-12 py-4 rounded text-xl shadow-lg"
+        onClick={() => navigate("/ProdutoSenac")}
       >
         ENTER
       </button>
 
-      <a
-        href="/senac"
-        className="absolute bottom-6 left-6 text-white/90 hover:text-white px-4 py-2 border border-white/40 rounded transition-colors"
-      >
-        voltar
-      </a>
+      <div className="absolute bottom-6 left-6 text-white/90 px-4 py-2 border border-white/40 rounded">voltar</div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import bg from "../img/bg-senac.png";
 
 function SescLogo({ className = "" }) {
@@ -22,6 +23,7 @@ function SescLogo({ className = "" }) {
 }
 
 export default function CadastroSesc() {
+  const navigate = useNavigate();
   return (
     <div
       className="relative min-h-screen w-full bg-cover bg-center bg-no-repeat overflow-hidden"
@@ -99,7 +101,7 @@ export default function CadastroSesc() {
         <button
           type="button"
           className="fixed bottom-8 right-10 bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-2 rounded shadow"
-          onClick={() => {}}
+          onClick={() => navigate("/ProdutoSesc")}
         >
           ENTER
         </button>

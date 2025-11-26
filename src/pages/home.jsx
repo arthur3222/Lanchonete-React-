@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useInRouterContext } from "react-router-dom";
+import { useInRouterContext } from "react-router-dom";
 import bg from "../img/bg-senac.png";
 
 export default function Home() {
@@ -25,47 +25,25 @@ export default function Home() {
             </h1>
           </div>
           <div className="flex flex-col items-center justify-center gap-10 sm:gap-12 md:flex-row md:gap-24">
-            {/* SESC */}
-            {hasRouter ? (
-              <Link
-                to="/sesc"
-                aria-label="Ir para Sesc"
-                className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold focus:outline-none focus:ring-4 focus:ring-blue-300 hover:scale-105 transition-transform
-                          w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl"
-              >
-                <span className="uppercase">sesc</span>
-              </Link>
-            ) : (
-              <a
-                href="/sesc"
-                aria-label="Ir para Sesc"
-                className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold focus:outline-none focus:ring-4 focus:ring-blue-300 hover:scale-105 transition-transform
-                           w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl"
-              >
-                <span className="uppercase">sesc</span>
-              </a>
-            )}
+            {/* SESC (sem navegação) */}
+            <div
+              role="button"
+              aria-disabled="true"
+              className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold
+                         w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl cursor-default opacity-95"
+            >
+              <span className="uppercase">sesc</span>
+            </div>
 
-            {/* SENAC */}
-            {hasRouter ? (
-              <Link
-                to="/senac"
-                aria-label="Ir para Senac"
-                className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold focus:outline-none focus:ring-4 focus:ring-blue-300 hover:scale-105 transition-transform
-                           w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl"
-              >
-                <span className="uppercase">senac</span>
-              </Link>
-            ) : (
-              <a
-                href="/senac"
-                aria-label="Ir para Senac"
-                className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold focus:outline-none focus:ring-4 focus:ring-blue-300 hover:scale-105 transition-transform
-                           w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl"
-              >
-                <span className="uppercase">senac</span>
-              </a>
-            )}
+            {/* SENAC (sem navegação) */}
+            <div
+              role="button"
+              aria-disabled="true"
+              className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold
+                         w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl cursor-default opacity-95"
+            >
+              <span className="uppercase">senac</span>
+            </div>
           </div>
         </div>
       </div>

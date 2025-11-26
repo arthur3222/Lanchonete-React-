@@ -8,10 +8,11 @@ export default function ProdutoSenac() {
   const [open, setOpen] = useState(false);
   const menuItems = [
     { label: "Home", path: "/" },
-    { label: "Café Sesc", path: "/sesc" },
-    { label: "Carrinho", path: "/carrinhoSenac" },
-    { label: "Lanchonete", path: "/ProdutoSenac" },
-    { label: "Sair", path: "/senac" },
+    { label: "Senac (início)", path: "/senac" },
+    { label: "Sesc (início)", path: "/sesc" },
+    { label: "Carrinho Senac", path: "/carrinhoSenac" },
+    { label: "Lanchonete Senac", path: "/ProdutoSenac" },
+    { label: "Sair", path: "/" },
   ];
 
   return (
@@ -56,12 +57,9 @@ export default function ProdutoSenac() {
         ))}
       </main>
 
-      <Link
-        to="/"
-        className="fixed bottom-5 left-5 bg-white/15 hover:bg-white/25 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold"
-      >
+      <div className="fixed bottom-5 left-5 bg-white/15 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold">
         voltar
-      </Link>
+      </div>
     </div>
   );
 }

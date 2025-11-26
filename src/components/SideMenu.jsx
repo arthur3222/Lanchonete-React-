@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 export default function SideMenu({ open, onClose, title, items, accent = "bg-blue-800" }) {
   return (
@@ -27,14 +26,13 @@ export default function SideMenu({ open, onClose, title, items, accent = "bg-blu
         </div>
         <nav className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
           {items.map(it => (
-            <Link
+            <div
               key={it.path + it.label}
-              to={it.path}
               onClick={onClose}
-              className="block w-full text-center font-semibold bg-white/15 hover:bg-white/25 rounded px-3 py-2"
+              className="block w-full text-center font-semibold bg-white/15 rounded px-3 py-2 cursor-default"
             >
               {it.label}
-            </Link>
+            </div>
           ))}
         </nav>
       </div>

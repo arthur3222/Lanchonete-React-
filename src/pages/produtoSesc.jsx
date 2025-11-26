@@ -21,10 +21,11 @@ export default function ProdutoSesc() {
   const [open, setOpen] = useState(false);
   const menuItems = [
     { label: "Home", path: "/" },
-    { label: "Café Senac", path: "/senac" },
-    { label: "Carrinho", path: "/carrinhoSesc" },
-    { label: "Lanchonete", path: "/ProdutoSesc" },
-    { label: "Sair", path: "/sesc" },
+    { label: "Sesc (início)", path: "/sesc" },
+    { label: "Senac (início)", path: "/senac" },
+    { label: "Carrinho Sesc", path: "/carrinhoSesc" },
+    { label: "Lanchonete Sesc", path: "/ProdutoSesc" },
+    { label: "Sair", path: "/" },
   ];
 
   return (
@@ -72,6 +73,7 @@ export default function ProdutoSesc() {
         ))}
       </main>
 
+<<<<<<< HEAD
        <Link
          to="/"
          className="fixed bottom-5 left-5 bg-white/15 hover:bg-white/25 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold"
@@ -81,3 +83,9 @@ export default function ProdutoSesc() {
      </div>
    );
  }
+=======
+      <div className="fixed bottom-5 left-5 bg-white/15 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold">voltar</div>
+    </div>
+  );
+}
+>>>>>>> 874833380f9ad48a5e7fa4d6fe9647e539ea745e

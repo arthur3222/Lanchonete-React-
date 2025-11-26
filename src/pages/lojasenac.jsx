@@ -1,6 +1,7 @@
 import React from "react";
 import { User } from "lucide-react";
 import HamburgerMenu from "../components/HamburgerMenu";
+import { Link } from "react-router-dom";
 
 export default function LojasSenac() {
   return (
@@ -15,7 +16,11 @@ export default function LojasSenac() {
       <span className="mt-6 text-xs md:text-sm font-semibold tracking-[0.4em] uppercase">
         LOJAS
       </span>
-      <div className="mt-10 w-[300px] h-[220px] relative rounded-md overflow-hidden border border-white/40">
+
+      <div
+        aria-disabled="true"
+        className="mt-10 w-[300px] h-[220px] relative rounded-md overflow-hidden border border-white/40"
+      >
         <div className="absolute inset-0 bg-white/20" />
         <div className="absolute inset-0 flex items-center justify-center">
           <span className="text-[18px] md:text-[20px] font-extrabold leading-tight tracking-wide text-center">
