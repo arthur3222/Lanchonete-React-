@@ -97,23 +97,9 @@ export default function HamburgerMenu({ light = false }) {
               ref={idx === 0 ? firstLinkRef : null}
               className="w-16 md:w-20 mx-auto text-center px-2 py-2 bg-orange-400 hover:bg-orange-500 border border-black/30 rounded-full text-white font-semibold text-sm shadow-sm transition focus:outline-none focus:ring-2 focus:ring-orange-300"
             >
-<<<<<<< HEAD
               {it.label}
             </Link>
           ))}
-=======
-              <X size={20} />
-            </button>
-        </div>
-        <nav className="flex flex-col gap-2 px-4 py-4 text-sm">
-          <div className="px-3 py-2 rounded">Home</div>
-          <div className="px-3 py-2 rounded">Sesc</div>
-          <div className="px-3 py-2 rounded">Senac</div>
-          <div className="px-3 py-2 rounded">Produtos Sesc</div>
-          <div className="px-3 py-2 rounded">Produtos Senac</div>
-          {/* Sair (estático) */}
-          <div className="mt-2 px-3 py-2 rounded bg-red-600/60 text-white font-semibold">Sair</div>
->>>>>>> 874833380f9ad48a5e7fa4d6fe9647e539ea745e
         </nav>
 
         <div className="mt-auto mb-6">

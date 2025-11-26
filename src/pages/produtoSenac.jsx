@@ -1,18 +1,28 @@
 import React, { useState } from "react";
 import { produtos } from "../data/produtos";
-import { CardProduto } from "../components/Produto";
 import SideMenu from "../components/SideMenu";
 import { Link } from "react-router-dom";
+
+function ProductTile({ item, store = "senac" }) {
+  return (
+    <Link to={`/produto/${item.id}?store=${store}`} className="flex flex-col items-center gap-2 text-center">
+      <div className="w-28 h-28 md:w-32 md:h-32 bg-white rounded-sm overflow-hidden flex items-center justify-center shadow-sm">
+        <img src={item.img} alt={item.nome} className="w-full h-full object-cover" />
+      </div>
+      <div className="text-xs font-extrabold uppercase text-white">{item.nome}</div>
+      <div className="text-xs text-white/90">R$ {Number(item.preco).toFixed(2).replace(".", ",")}</div>
+    </Link>
+  );
+}
 
 export default function ProdutoSenac() {
   const [open, setOpen] = useState(false);
   const menuItems = [
     { label: "Home", path: "/" },
-    { label: "Senac (início)", path: "/senac" },
-    { label: "Sesc (início)", path: "/sesc" },
-    { label: "Carrinho Senac", path: "/carrinhoSenac" },
-    { label: "Lanchonete Senac", path: "/ProdutoSenac" },
-    { label: "Sair", path: "/" },
+    { label: "Café Sesc", path: "/sesc" },
+    { label: "Carrinho", path: "/carrinhoSenac" },
+    { label: "Lanchonete", path: "/ProdutoSenac" },
+    { label: "Sair", path: "/senac" },
   ];
 
   return (
@@ -22,44 +32,47 @@ export default function ProdutoSenac() {
         onClose={() => setOpen(false)}
         title="Café Senac"
         items={menuItems}
-        accent="bg-[#FF7700]"
+        accent="bg-[#ff6600]"
       />
 
       <header className="h-20 flex items-center px-5">
         <button
           onClick={() => setOpen(true)}
-          className="text-white text-3xl font-bold px-3 py-2 rounded hover:bg-white/10"
+          className="text-white text-3xl px-3 py-2 rounded hover:bg-white/10"
           aria-label="Abrir menu"
         >
           ☰
         </button>
-        <h1 className="ml-4 text-2xl font-extrabold tracking-wide">Lanchonete</h1>
       </header>
 
-      <main className="px-4 pb-24">
-        {Object.keys(produtos).map(cat => (
-          <section key={cat} className="mb-10">
-            <h2 className="text-2xl font-bold mb-4">{cat}</h2>
-            <div className="flex flex-wrap gap-4">
-              {produtos[cat].map(item => (
-                <div key={item.id} className="w-[48%] min-w-[220px]">
-                  <CardProduto
-                    img={item.img}
-                    nome={item.nome}
-                    preco={item.preco}
-                    produtoId={item.id}
-                    store="senac"
-                  />
-                </div>
+      <main className="px-6 pb-24 max-w-6xl mx-auto">
+        {Object.keys(produtos).map((cat) => (
+          <section key={cat} className="mb-12">
+            <div className="flex justify-center mb-6">
+              <div
+                data-source="src/data/produtos.js"
+                title={`categoria: ${cat} — definida em src/data/produtos.js`}
+                className="bg-orange-500 w-28 sm:w-40 md:w-56 py-1 rounded-sm font-bold uppercase text-sm text-center"
+              >
+                {cat}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-8 items-start justify-items-center">
+              {produtos[cat].map((item) => (
+                <ProductTile key={item.id} item={item} store="senac" />
               ))}
             </div>
           </section>
         ))}
       </main>
 
-      <div className="fixed bottom-5 left-5 bg-white/15 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold">
+      <Link
+        to="/"
+        className="fixed bottom-5 left-5 bg-white/15 hover:bg-white/25 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold"
+      >
         voltar
-      </div>
+      </Link>
     </div>
   );
 }

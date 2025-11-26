@@ -1,9 +1,5 @@
 import React from "react";
-<<<<<<< HEAD
 import { useParams, useSearchParams, Link, useNavigate } from "react-router-dom";
-=======
-import { useParams, useSearchParams } from "react-router-dom";
->>>>>>> 874833380f9ad48a5e7fa4d6fe9647e539ea745e
 import { getProdutoById } from "../data/produtos";
 import { useCart } from "./CartContext";
 

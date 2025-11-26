@@ -73,19 +73,12 @@ export default function ProdutoSesc() {
         ))}
       </main>
 
-<<<<<<< HEAD
-       <Link
-         to="/"
-         className="fixed bottom-5 left-5 bg-white/15 hover:bg-white/25 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold"
-       >
-         voltar
-       </Link>
-     </div>
-   );
- }
-=======
-      <div className="fixed bottom-5 left-5 bg-white/15 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold">voltar</div>
+      <Link
+        to="/"
+        className="fixed bottom-5 left-5 bg-white/15 hover:bg-white/25 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold"
+      >
+        voltar
+      </Link>
     </div>
   );
 }
->>>>>>> 874833380f9ad48a5e7fa4d6fe9647e539ea745e

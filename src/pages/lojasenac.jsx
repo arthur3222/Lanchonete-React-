@@ -1,12 +1,13 @@
 import React from "react";
 import { User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import HamburgerMenu from "../components/HamburgerMenu";
-import { Link } from "react-router-dom";
 
 export default function LojasSenac() {
+  const navigate = useNavigate();
   return (
     <div className="relative min-h-screen w-full bg-[#FF7700] text-white flex flex-col items-center justify-center px-4">
-      <HamburgerMenu />
+      <HamburgerMenu /> {/* componente reutilizável */}
       <h1 className="mt-0 text-sm md:text-base font-bold tracking-[0.3em] uppercase">
         SEJA BEM VINDO
       </h1>
