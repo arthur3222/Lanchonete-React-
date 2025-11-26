@@ -27,24 +27,6 @@ export default function Home() {
             </h1>
           </div>
           <div className="flex flex-col items-center justify-center gap-10 sm:gap-12 md:flex-row md:gap-24">
-<<<<<<< HEAD
-            {/* SESC com navegação */}
-            <Link
-              to="/sesc"
-              aria-label="Ir para Sesc"
-              className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold hover:bg-blue-800 transition-colors
-                         w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl focus:outline-none focus:ring-4 focus:ring-blue-300"
-            >
-              <span className="uppercase">sesc</span>
-            </Link>
-
-            {/* SENAC com navegação */}
-            <Link
-              to="/senac"
-              aria-label="Ir para Senac"
-              className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold hover:bg-blue-800 transition-colors
-                         w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl focus:outline-none focus:ring-4 focus:ring-blue-300"
-=======
             <Link
               to="/sesc"
               aria-label="Ir para Sesc"
@@ -58,7 +40,6 @@ export default function Home() {
               aria-label="Ir para Senac"
               className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold
                          w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl hover:scale-105 transition-transform"
->>>>>>> 758e0468464b7e591210941d5a35d6e80e509992
             >
               <span className="uppercase">senac</span>
             </Link>

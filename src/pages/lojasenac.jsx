@@ -1,18 +1,7 @@
 import React, { useState } from "react";
 import { User } from "lucide-react";
-<<<<<<< HEAD
-import { useNavigate } from "react-router-dom";
-import HamburgerMenu from "../components/HamburgerMenu";
-
-export default function LojasSenac() {
-  const navigate = useNavigate();
-  return (
-    <div className="relative min-h-screen w-full bg-[#FF7700] text-white flex flex-col items-center justify-center px-4">
-      <HamburgerMenu /> {/* componente reutilizável */}
-      <h1 className="mt-0 text-sm md:text-base font-bold tracking-[0.3em] uppercase">
-=======
-import { Link } from "react-router-dom"; // <-- adicionado
-import SideMenu from "../components/SideMenu"; // novo import
+import { Link } from "react-router-dom";
+import SideMenu from "../components/SideMenu";
 
 export default function LojasSenac() {
   const [open, setOpen] = useState(false);
@@ -26,8 +15,7 @@ export default function LojasSenac() {
   ];
 
   return (
-    <div className="relative min-h-screen w-full bg-[#003E7E] text-white flex flex-col items-center justify-start px-4 pt-8">
-      {/* SideMenu */}
+    <div className="relative min-h-screen w-full bg-[#FF7700] text-white flex flex-col items-center justify-start px-4 pt-8">
       <SideMenu
         open={open}
         onClose={() => setOpen(false)}
@@ -35,7 +23,7 @@ export default function LojasSenac() {
         items={menuItems}
         accent="bg-[#FF7700]"
       />
-      {/* hamburger padronizado (abre SideMenu) */}
+
       <button
         onClick={() => setOpen(true)}
         aria-label="Abrir menu"
@@ -55,7 +43,6 @@ export default function LojasSenac() {
       </button>
 
       <h1 className="mt-2 text-sm md:text-base font-bold tracking-[0.3em] uppercase">
->>>>>>> 758e0468464b7e591210941d5a35d6e80e509992
         SEJA BEM VINDO
       </h1>
 
@@ -66,31 +53,10 @@ export default function LojasSenac() {
 
       <span className="text-xs font-semibold tracking-wide mt-4 mb-6">LOJAS</span>
 
-      {/* Cartão de pedido (tamanho e estilo ajustados para ficar igual à imagem) */}
-      <Link
-        to="/sesc/produtos"
-        aria-label="Fazer pedido Sesc"
-        className="mt-6 w-[340px] h-[180px] relative rounded-md overflow-hidden border border-white/30 shadow-lg"
-      >
-        <div className="absolute inset-0 bg-black/30 z-0" />
-        <img
-          src="/img/pedido.png"
-          alt="Loja"
-          className="absolute inset-0 w-full h-full object-cover z-0"
-        />
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          <span className="text-[20px] md:text-[22px] font-extrabold text-center leading-tight text-white drop-shadow">
-            FAZER
-            <br />
-            PEDIDO
-          </span>
-        </div>
-      </Link>
-
       <Link
         to="/ProdutoSenac"
         aria-label="Fazer pedido Senac"
-        className="mt-10 w-[300px] h-[220px] relative rounded-md overflow-hidden border border-white/40 flex items-center justify-center"
+        className="mt-6 w-[300px] h-[220px] relative rounded-md overflow-hidden border border-white/40 flex items-center justify-center"
       >
         <div className="absolute inset-0 bg-white/20" />
         <span className="relative z-10 text-[18px] md:text-[20px] font-extrabold leading-tight tracking-wide text-center">
