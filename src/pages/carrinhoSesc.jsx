@@ -1,60 +1,123 @@
 import React from "react";
-import { Trash2, ShoppingBasket, Menu } from "lucide-react";
-
-// Mock de produtos do carrinho
-const carrinho = [
-  {
-    id: "mistao",
-    nome: "MISTO QUENTE",
-    descricao: "Pão, queijo e presunto",
-    preco: 4.59,
-    img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=300&q=80",
-  },
-  {
-    id: "suco-lata",
-    nome: "SUCO LATA",
-    descricao: "Suco sabor uva-derivado da fruta uva",
-    preco: 4.59,
-    img: "https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=300&q=80",
-  },
-  {
-    id: "cafe",
-    nome: "CAFÉ",
-    descricao: "Café feito do café",
-    preco: 7.0,
-    img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=300&q=80",
-  },
-];
+import { Link, useNavigate } from "react-router-dom";
+import { Trash2 } from "lucide-react";
+import HamburgerMenu from "../components/HamburgerMenu";
+import { useCart } from "../components/CartContext";
 
 export default function CarrinhoSesc() {
+  const { carts, removeFromCart, clearCart, setCartItems } = useCart();
+  const navigate = useNavigate();
+  const items = (carts && carts.sesc) || [];
+
+  const updateQty = (index, newQty) => {
+    const copy = [...items];
+    copy[index] = { ...copy[index], quantidade: Math.max(1, Number(newQty || copy[index].quantidade || copy[index].qtd || 1)) };
+    setCartItems("sesc", copy);
+  };
+
+  const total = items.reduce((acc, it) => {
+    const preco = Number(it.preco || 0);
+    const qtd = Number(it.quantidade || it.qtd || 1);
+    return acc + preco * qtd;
+  }, 0);
+
   return (
-    <div className="min-h-screen w-full bg-[#00529B] flex flex-col px-8 py-6 relative">
-      {/* Menu hambúrguer */}
-      <div className="mb-8">
-        <Menu size={32} className="text-white" />
-      </div>
-      {/* Lista de produtos do carrinho */}
-      <div className="flex flex-col gap-10">
-        {carrinho.map((item) => (
-          <div key={item.id} className="flex items-center gap-8">
-            <img src={item.img} alt={item.nome} className="w-36 h-32 object-cover rounded" />
-            <div className="flex flex-col flex-1">
-              <span className="text-white text-2xl font-extrabold leading-tight">{item.nome}</span>
-              <span className="text-white text-base font-semibold mb-2">{item.descricao}</span>
-              <div className="flex items-center gap-2">
-                <button className="bg-white/10 border border-white/40 rounded p-1 text-white hover:bg-white/20">
-                  <Trash2 size={20} />
-                </button>
-                <span className="text-white text-sm font-bold ml-auto">R${item.preco.toFixed(2)}</span>
-              </div>
+    <div className="min-h-screen w-full bg-[#0B4A80] text-white">
+      {/* hambúrguer consistente com outras páginas */}
+      <HamburgerMenu />
+
+      <main className="max-w-6xl mx-auto px-8 py-8">
+        <h1 className="text-2xl md:text-3xl font-extrabold mb-6">Carrinho</h1>
+
+        {items.length === 0 ? (
+          <div className="bg-[#083a63] rounded-lg p-8 text-center">
+            <p className="text-lg font-semibold mb-4">Seu carrinho está vazio</p>
+            <div className="flex justify-center gap-4">
+              <Link
+                to="/ProdutoSesc"
+                className="inline-block bg-orange-400 hover:bg-orange-500 text-black font-bold px-5 py-2 rounded"
+              >
+                VER PRODUTOS
+              </Link>
+              <Link
+                to="/"
+                className="inline-block border border-white/30 px-5 py-2 rounded hover:bg-white/5"
+              >
+                voltar
+              </Link>
             </div>
           </div>
-        ))}
-      </div>
-      {/* Ícone de carrinho no canto inferior direito */}
-      <div className="fixed bottom-8 right-10 bg-white rounded-full p-2 shadow">
-        <ShoppingBasket size={32} className="text-[#00529B]" />
-      </div>
+        ) : (
+          <>
+            <ul className="space-y-8">
+              {items.map((it, idx) => (
+                <li key={idx} className="flex items-center gap-6 bg-[#083a63] p-4 rounded-lg">
+                  <img
+                    src={typeof it.img === "string" ? it.img : (it.img && it.img.uri) || "/img/pedido.png"}
+                    alt={it.nome}
+                    className="w-28 h-28 object-cover rounded"
+                  />
+
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h2 className="text-lg md:text-xl font-extrabold uppercase">{it.nome}</h2>
+                        {it.descricao && <p className="text-sm text-white/80 mt-1">{it.descricao}</p>}
+                      </div>
+
+                      <div className="text-right">
+                        <div className="font-bold">R$ {Number(it.preco || 0).toFixed(2).replace(".", ",")}</div>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 flex items-center gap-4">
+                      <label className="text-sm text-white/80">Qtd:</label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={it.quantidade ?? it.qtd ?? 1}
+                        onChange={(e) => updateQty(idx, e.target.value)}
+                        className="w-20 text-black rounded px-2 py-1"
+                      />
+
+                      <button
+                        onClick={() => removeFromCart("sesc", idx)}
+                        aria-label="Remover item"
+                        className="inline-flex items-center gap-2 px-3 py-2 rounded bg-white/10 hover:bg-white/20 ml-6"
+                      >
+                        <Trash2 size={16} /> <span className="text-sm">Remover</span>
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <div className="text-sm text-white/80">Total</div>
+                <div className="text-2xl font-extrabold">R$ {total.toFixed(2).replace(".", ",")}</div>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => clearCart("sesc")}
+                  className="px-4 py-2 rounded bg-white/10 hover:bg-white/20"
+                >
+                  LIMPAR
+                </button>
+
+                <button
+                  onClick={() => navigate("/concluir-pedido")}
+                  className="px-6 py-3 rounded bg-orange-400 hover:bg-orange-500 font-bold text-black"
+                >
+                  CONCLUIR PEDIDO
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+      </main>
     </div>
   );
 }

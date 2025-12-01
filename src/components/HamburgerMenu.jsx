@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function HamburgerMenu({ light = false }) {
   const [open, setOpen] = useState(false);
@@ -16,7 +16,7 @@ export default function HamburgerMenu({ light = false }) {
     close();
   }, [location.pathname]);
 
-  // Fecha ao clicar fora / ESC e gerencia foco
+  // Fecha ao clicar fora / ESC e gerencia foco e scroll do body
   useEffect(() => {
     function handleOutside(e) {
       if (open && panelRef.current && !panelRef.current.contains(e.target)) {
@@ -29,13 +29,9 @@ export default function HamburgerMenu({ light = false }) {
     document.addEventListener("mousedown", handleOutside);
     document.addEventListener("keydown", handleEsc);
 
-    // bloquear scroll do body quando o menu estiver aberto
     if (open) {
       document.body.style.overflow = "hidden";
-      // foca o primeiro link disponível
-      setTimeout(() => {
-        firstLinkRef.current?.focus();
-      }, 0);
+      setTimeout(() => firstLinkRef.current?.focus(), 0);
     } else {
       document.body.style.overflow = "";
     }
@@ -52,10 +48,9 @@ export default function HamburgerMenu({ light = false }) {
 
   const menuItems = [
     { label: "inicial", path: "/" },
-    { label: "sesc", path: "/sesc" },
-    { label: "senac", path: "/senac" },
-    { label: "lojas", path: "/lojas" },
-    // ajuste os caminhos conforme sua aplicação
+    { label: "café senac", path: "/senac" },
+    { label: "conta", path: "/conta" },
+    { label: "meu sesc", path: "/sesc" },
   ];
 
   return (
@@ -82,28 +77,28 @@ export default function HamburgerMenu({ light = false }) {
       {/* barra lateral estreita */}
       <aside
         ref={panelRef}
-        className={`fixed top-0 left-0 z-50 h-full w-24 md:w-28 ${bgPanel} flex flex-col items-center py-6 gap-4 shadow-lg transform transition-transform
+        className={`fixed top-0 left-0 z-50 h-full w-32 bg-blue-600 flex flex-col items-center pt-20 gap-5 shadow-lg transform transition-transform
           ${open ? "translate-x-0" : "-translate-x-full"}`}
         role="dialog"
         aria-label="Menu lateral"
         aria-hidden={!open}
       >
-        <nav className="flex flex-col items-center w-full gap-3" aria-label="Navegação principal">
+        <nav className="flex flex-col items-center w-full gap-4 px-4" aria-label="Navegação principal">
           {menuItems.map((it, idx) => (
             <Link
               key={it.path + it.label}
               to={it.path}
               onClick={close}
               ref={idx === 0 ? firstLinkRef : null}
-              className="w-16 md:w-20 mx-auto text-center px-2 py-2 bg-orange-400 hover:bg-orange-500 border border-black/30 rounded-full text-white font-semibold text-sm shadow-sm transition focus:outline-none focus:ring-2 focus:ring-orange-300"
+              className="w-full text-center px-4 py-3 bg-orange-500 hover:bg-orange-600 rounded-lg text-white font-medium text-sm shadow-md transition focus:outline-none focus:ring-2 focus:ring-orange-300"
             >
               {it.label}
             </Link>
           ))}
         </nav>
 
-        <div className="mt-auto mb-6">
-          <Link to="/" onClick={close} className="inline-block text-white/90 px-2 py-1">
+        <div className="mt-auto mb-8">
+          <Link to="/" onClick={close} className="inline-block text-white/90 text-2xl px-2 py-1">
             ←
           </Link>
         </div>

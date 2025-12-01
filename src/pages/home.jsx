@@ -15,7 +15,6 @@ export default function Home() {
         backgroundImage: `url(${bg})`,
       }}
     >
-      {/* navegação superior removida */}
 
       <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/60 to-white/90 pointer-events-none" />
 
@@ -31,7 +30,7 @@ export default function Home() {
               to="/sesc"
               aria-label="Ir para Sesc"
               className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold
-                         w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl hover:scale-105 transition-transform"
+                        w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl hover:scale-105 transition-transform"
             >
               <span className="uppercase">sesc</span>
             </Link>
@@ -39,7 +38,7 @@ export default function Home() {
               to="/senac"
               aria-label="Ir para Senac"
               className="group flex items-center justify-center rounded-full bg-blue-900 text-white font-bold
-                         w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl hover:scale-105 transition-transform"
+                        w-56 sm:w-72 md:w-80 lg:w-[26rem] aspect-square text-3xl sm:text-4xl md:text-5xl hover:scale-105 transition-transform"
             >
               <span className="uppercase">senac</span>
             </Link>

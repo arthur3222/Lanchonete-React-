@@ -1,6 +1,11 @@
-import React from "react";
+import UploadImage from "./UploadImage";
 
-// App não é mais usado; as rotas estão em src/main.jsx
-export default function App() {
-  return null;
+function App() {
+  return (
+    <div>
+      <UploadImage />
+    </div>
+  );
 }
+
+export default App;
