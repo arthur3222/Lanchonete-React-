@@ -1,9 +1,30 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext(null);
 
 export function CartProvider({ children }) {
-  const [carts, setCarts] = useState({ sesc: [], senac: [] });
+  const [carts, setCarts] = useState(() => {
+    // Carregar carrinhos do localStorage ao iniciar
+    try {
+      const sescSaved = localStorage.getItem('carrinhoSesc');
+      const senacSaved = localStorage.getItem('carrinhoSenac');
+      return {
+        sesc: sescSaved ? JSON.parse(sescSaved) : [],
+        senac: senacSaved ? JSON.parse(senacSaved) : [],
+      };
+    } catch {
+      return { sesc: [], senac: [] };
+    }
+  });
+
+  // Sincronizar com localStorage quando mudar
+  useEffect(() => {
+    localStorage.setItem('carrinhoSesc', JSON.stringify(carts.sesc || []));
+  }, [carts.sesc]);
+
+  useEffect(() => {
+    localStorage.setItem('carrinhoSenac', JSON.stringify(carts.senac || []));
+  }, [carts.senac]);
 
   const addToCart = (store, product) => {
     const key = store === 'senac' ? 'senac' : 'sesc';
@@ -47,6 +68,7 @@ export function CartProvider({ children }) {
   const clearCart = (store) => {
     const key = store === 'senac' ? 'senac' : 'sesc';
     setCarts(prev => ({ ...prev, [key]: [] }));
+    localStorage.removeItem(store === 'sesc' ? 'carrinhoSesc' : 'carrinhoSenac');
   };
 
   const setCartItems = (store, items) => {

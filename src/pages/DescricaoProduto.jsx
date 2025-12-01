@@ -20,9 +20,10 @@ export default function DescricaoProduto() {
   const [quantidade, setQuantidade] = useState(1);
 
   const menuItems = [
-    { label: "inicial", path: "/" },
-    { label: "criar pedido", path: "/ProdutoSesc" },
-    { label: "pagina", path: "/lojasesc" },
+    { label: "home", path: "/" },
+    { label: "fazer pedido", path: "/ProdutoSesc" },
+    { label: "Loja Sesc", path: "/lojasesc" },
+    { label: "Loja Senac", path: "/lojasenac" },
     { label: "carrinho", path: "/carrinhoSesc" },
   ];
 

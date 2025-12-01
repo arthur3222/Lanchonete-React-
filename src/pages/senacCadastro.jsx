@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import MaskedInput from "../components/MaskedInput";
 import { supabase } from "../supabaseClient";
+import HamburgerMenu from "../components/HamburgerMenu"; // ADICIONE ESTA LINHA
 
 function SenacLogo({ className = "" }) {
   return (
@@ -49,7 +50,7 @@ export default function SenacCadastro() {
 
       // Determinar role baseado no email
       let userRole = 'aluno';
-      if (formData.email.endsWith('@admMaster.com')) userRole = 'master';
+      if (formData.email.endsWith('@master.com')) userRole = 'master';
       else if (formData.email.endsWith('@adm.com')) userRole = 'admin';
 
       // 1. Verificar se email já existe
@@ -135,6 +136,7 @@ export default function SenacCadastro() {
 
   return (
     <div className="relative min-h-screen w-full bg-[#FF7700] text-white overflow-hidden pb-24 md:pb-32">
+      <HamburgerMenu /> {/* ADICIONE O BOTÃO HAMBURGUER */}
       <div className="min-h-screen w-full flex flex-col items-center justify-center gap-14 px-4">
         <div className="w-64 h-64 rounded-full border border-white/80 flex items-center justify-center">
           <SenacLogo className="w-40 h-40 text-white" />
@@ -207,7 +209,7 @@ export default function SenacCadastro() {
             disabled={loading}
           />
           <p className="w-[400px] md:w-[460px] text-xs text-white/80 -mt-4">
-            💡 Dica: Use @adm.com para Admin ou @admMaster.com para Master
+            💡 Dica: Use @adm.com para Admin ou @master.com para Master
           </p>
 
           <span className="w-[400px] md:w-[460px] text-center bg-white/30 text-white text-lg md:text-xl font-bold rounded-md py-3">

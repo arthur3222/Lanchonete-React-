@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import MaskedInput from "../components/MaskedInput";
 import { supabase } from "../supabaseClient";
+import HamburgerMenu from "../components/HamburgerMenu"; // ADICIONE ESTA LINHA
 
 function SescLogo({ className = "" }) {
   return (
@@ -63,36 +64,42 @@ export default function SescCadastro() {
 
       // Determinar role pelo email
       let userRole = 'aluno';
-      if (formData.email.endsWith('@admMaster.com')) userRole = 'master';
-      else if (formData.email.endsWith('@adm.com')) userRole = 'admin';
-
-      // 1. Verificar se email já existe
-      const { data: existingUser } = await supabase
-        .from('usuarios')
-        .select('email')
-        .eq('email', formData.email)
-        .single();
-      if (existingUser) {
-        setError("Este email já está cadastrado. Faça login ou use outro email.");
-        return;
+      const emailLowerCase = formData.email.toLowerCase();
+      if (emailLowerCase.endsWith('@master.com')) {
+        userRole = 'master';
+      } else if (emailLowerCase.endsWith('@admin.com')) {
+        userRole = 'admin';
       }
 
-      // 2. Criar no Auth
+      // Criar usuário no Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.senha,
         options: {
-          emailRedirectTo: window.location.origin,
-          data: { nome_completo: formData.nome_completo, role: userRole }
+          data: { 
+            nome_completo: formData.nome_completo, 
+            role: userRole,
+            cpf: formData.cpf || null,
+            telefone: formData.telefone || null
+          },
+          emailRedirectTo: undefined
         }
       });
-      if (authError) {
-        if (authError.message.includes('already registered')) throw new Error("Email já cadastrado. Faça login.");
-        throw new Error(authError.message);
-      }
-      if (!authData?.user) throw new Error("Erro ao criar usuário");
 
-      // 3. Inserir na usuarios
+      if (authError) {
+        if (authError.message.includes('already registered') || authError.message.includes('User already registered')) {
+          setError("Email já cadastrado. Faça login ou use outro email.");
+        } else {
+          throw new Error(authError.message);
+        }
+        return;
+      }
+
+      if (!authData?.user) {
+        throw new Error("Erro ao criar usuário");
+      }
+
+      // Inserir na tabela usuarios IMEDIATAMENTE após criar no Auth
       const { error: insertError } = await supabase
         .from('usuarios')
         .insert({
@@ -103,38 +110,36 @@ export default function SescCadastro() {
           telefone: formData.telefone || null,
           role: userRole
         });
-      if (insertError) throw new Error(insertError.message);
 
-      // 4. Se já logado, montar userData sem SELECT
-      if (authData.session) {
-        const userData = {
-          id: authData.user.id,
-          email: formData.email,
-          nome_completo: formData.nome_completo,
-          cpf: formData.cpf || null,
-          telefone: formData.telefone || null,
-          role: userRole
-        };
-        localStorage.setItem('authUser', JSON.stringify({
-          ...userData,
-          token: authData.session.access_token
-        }));
-
-        const { error: auditError } = await supabase.from('auditoria').insert({
-          usuario_id: userData.id,
-          acao: 'CADASTRO',
-          tabela: 'usuarios',
-          registro_id: userData.id,
-          dados_novos: { email: userData.email, nome: userData.nome_completo, role: userData.role }
-        });
-        if (auditError) console.error("Erro auditoria:", auditError.message);
-
-        navigate(userRole === 'admin' || userRole === 'master' ? "/adminSesc" : "/lojasesc");
-      } else {
-        setError("✅ Cadastro realizado! Verifique seu email para confirmar a conta.");
-        setTimeout(() => navigate("/sesc/login"), 3000);
+      if (insertError) {
+        console.error("Erro ao inserir usuário na tabela:", insertError);
+        // Se falhar ao inserir, tentar novamente ou avisar
+        if (insertError.code === '23505') { // Duplicate key
+          console.log("Usuário já existe na tabela, continuando...");
+        } else {
+          setError("⚠️ Cadastro no Auth OK, mas houve erro ao salvar dados completos. Você pode fazer login.");
+        }
       }
+
+      // Sucesso - mostrar mensagem
+      setError("✅ Cadastro realizado com sucesso! Você já pode fazer login.");
+      
+      // Limpar formulário
+      setFormData({
+        nome_completo: "",
+        cpf: "",
+        telefone: "",
+        email: "",
+        senha: "",
+      });
+
+      // Redirecionar após 3 segundos
+      setTimeout(() => {
+        navigate("/sesc/login");
+      }, 3000);
+
     } catch (err) {
+      console.error("Erro no cadastro:", err);
       setError(err.message || "Erro ao cadastrar. Tente novamente.");
     } finally {
       setLoading(false);
@@ -143,6 +148,7 @@ export default function SescCadastro() {
 
   return (
     <div className="relative min-h-screen w-full bg-[#0B4A80] text-white overflow-hidden pb-24 md:pb-32">
+      <HamburgerMenu /> {/* ADICIONE O BOTÃO HAMBURGUER */}
       <div className="min-h-screen w-full flex flex-col items-center justify-center gap-14 px-4">
         {/* Logo (maior) */}
         <div className="w-64 h-64 rounded-full border border-white/80 flex items-center justify-center">
@@ -221,7 +227,7 @@ export default function SescCadastro() {
             disabled={loading}
           />
           <p className="w-[400px] md:w-[460px] text-xs text-white/70 -mt-4">
-            💡 Dica: Use @adm.com para Admin ou @admMaster.com para Master
+            💡 Use @admin.com para Admin ou @master.com para Master
           </p>
 
           {/* Senha */}
@@ -237,18 +243,17 @@ export default function SescCadastro() {
             className="w-[400px] md:w-[460px] rounded-md border border-white/60 bg-blue-800/40 text-white placeholder-white/60 px-6 py-4 outline-none focus:border-white"
             disabled={loading}
           />
+
+          {/* Botão ENTER no canto inferior direito */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="self-end md:self-end fixed bottom-8 right-10 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold px-12 py-4 rounded text-xl shadow-lg"
+          >
+            {loading ? "CADASTRANDO..." : "CADASTRAR"}
+          </button>
         </form>
       </div>
-
-      {/* Botão ENTER no canto inferior direito */}
-      <button
-        type="button"
-        onClick={handleSubmit}
-        disabled={loading}
-        className="fixed bottom-8 right-10 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold px-12 py-4 rounded text-xl shadow-lg"
-      >
-        {loading ? "CADASTRANDO..." : "CADASTRAR"}
-      </button>
 
       {/* Voltar */}
       <Link

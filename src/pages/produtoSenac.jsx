@@ -7,7 +7,11 @@ function ProductTile({ item, store = "senac" }) {
 	return (
 		<Link to={`/produto/${item.id}?store=${store}`} className="flex flex-col items-center gap-2 text-center">
 			<div className="w-28 h-28 md:w-32 md:h-32 bg-white rounded-sm overflow-hidden flex items-center justify-center shadow-sm">
-				<img src={item.img} alt={item.nome} className="w-full h-full object-cover" />
+				{item.img ? (
+					<img src={item.img} alt={item.nome} className="w-full h-full object-cover" />
+				) : (
+					<div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">Sem imagem</div>
+				)}
 			</div>
 			<div className="text-xs font-extrabold uppercase text-white">{item.nome}</div>
 			<div className="text-xs text-white/90">R$ {Number(item.preco).toFixed(2).replace(".", ",")}</div>
@@ -20,9 +24,10 @@ export default function ProdutoSenac() {
 	const [userRole, setUserRole] = useState(null);
 
 	const menuItems = [
-		{ label: "inicial", path: "/" },
-		{ label: "criar pedido", path: "/ProdutoSenac" },
-		{ label: "pagina", path: "/lojasenac" },
+		{ label: "home", path: "/" },
+		{ label: "fazer pedido", path: "/ProdutoSenac" },
+		{ label: "Loja Sesc", path: "/lojasesc" },
+		{ label: "Loja Senac", path: "/lojasenac" },
 		{ label: "carrinho", path: "/carrinhoSenac" },
 	];
 

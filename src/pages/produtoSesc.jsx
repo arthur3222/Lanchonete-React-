@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { produtos } from "../data/produtos";
 import SideMenu from "../components/SideMenu";
 import { Link } from "react-router-dom";
+import PedidoNotification from "../components/PedidoNotification";
 import { supabase } from "../supabaseClient"; // Corrija para importação nomeada
 
 function ProductTile({ item, store = "sesc" }) {
@@ -27,9 +28,10 @@ export default function ProdutoSesc() {
 	const [userRole, setUserRole] = useState(null);
 
 	const menuItems = [
-		{ label: "inicial", path: "/" },
-		{ label: "criar pedido", path: "/ProdutoSesc" },
-		{ label: "pagina", path: "/lojasesc" },
+		{ label: "home", path: "/" },
+		{ label: "fazer pedido", path: "/ProdutoSesc" },
+		{ label: "Loja Sesc", path: "/lojasesc" },
+		{ label: "Loja Senac", path: "/lojasenac" },
 		{ label: "carrinho", path: "/carrinhoSesc" },
 	];
 
@@ -53,6 +55,8 @@ export default function ProdutoSesc() {
 
 	return (
 		<div className="min-h-screen bg-[#0B4A80] text-white">
+			<PedidoNotification />
+
 			<SideMenu 
 				open={open} 
 				onClose={() => setOpen(false)} 

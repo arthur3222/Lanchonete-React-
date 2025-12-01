@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function SenacLogo({ className = "" }) {
   return (
-    <svg viewBox="0 0 120 60" className={className}>
+    <svg viewBox="0 0 120 60" className={className} aria-label="Logo Senac">
       <path d="M10 18 C 38 -2, 82 -2, 110 18" stroke="currentColor" strokeWidth="6" fill="none" strokeLinecap="round" />
       <text x="60" y="45" textAnchor="middle" fontWeight="900" fontSize="32" fontFamily="Arial, Helvetica, sans-serif" fill="currentColor">
         senac
@@ -13,18 +14,27 @@ function SenacLogo({ className = "" }) {
   );
 }
 
+const ERROR_MESSAGES = {
+  'Invalid login credentials': 'Email ou senha incorretos',
+  'Email not confirmed': 'Confirme seu email antes de fazer login',
+  'default': 'Erro ao fazer login. Tente novamente.',
+};
+
 export default function SenacLogin() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [formData, setFormData] = useState({ email: "", senha: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError(""); // Limpar erro ao digitar
+  };
+
   const handleEnter = async (e) => {
     e.preventDefault();
-    setError("");
     
-    if (!email || !senha) {
+    if (!formData.email || !formData.senha) {
       setError("Preencha email e senha");
       return;
     }
@@ -33,11 +43,18 @@ export default function SenacLogin() {
       setLoading(true);
       
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password: senha,
+        email: formData.email.trim().toLowerCase(),
+        password: formData.senha,
       });
 
-      if (authError) throw new Error(authError.message);
+      if (authError) {
+        const friendlyMessage = ERROR_MESSAGES[authError.message] || ERROR_MESSAGES.default;
+        throw new Error(friendlyMessage);
+      }
+
+      if (!authData?.user) {
+        throw new Error("Erro ao autenticar usuário");
+      }
 
       const { data: userData, error: userError } = await supabase
         .from('usuarios')
@@ -45,26 +62,34 @@ export default function SenacLogin() {
         .eq('id', authData.user.id)
         .single();
 
-      if (userError) throw new Error(userError.message);
+      if (userError) {
+        throw new Error("Usuário não encontrado no sistema");
+      }
 
       localStorage.setItem('authUser', JSON.stringify({
         ...userData,
         token: authData.session.access_token
       }));
 
-      await supabase.from('auditoria').insert({
+      // Auditoria em background
+      supabase.from('auditoria').insert({
         usuario_id: userData.id,
         acao: 'LOGIN',
         tabela: 'usuarios',
         registro_id: userData.id
+      }).then(({ error }) => {
+        if (error) console.error("Erro ao registrar auditoria:", error);
       });
 
-      if (userData.role === 'admin' || userData.role === 'master') {
-        navigate("/adminSenac");
-      } else {
-        navigate("/lojasenac");
-      }
+      // Redirecionar baseado na role
+      const redirectPath = (userData.role === 'admin' || userData.role === 'master') 
+        ? "/adminSenac" 
+        : "/lojasenac";
+      
+      navigate(redirectPath, { replace: true });
+      
     } catch (err) {
+      console.error("Erro no login:", err);
       setError(err.message || "Erro ao fazer login");
     } finally {
       setLoading(false);
@@ -83,7 +108,7 @@ export default function SenacLogin() {
         </h1>
 
         {error && (
-          <div className="w-[340px] md:w-[380px] bg-red-500/20 border border-red-500 text-white px-4 py-3 rounded text-center">
+          <div className="w-[340px] md:w-[380px] bg-red-500/20 border border-red-500 text-white px-4 py-3 rounded text-center" role="alert">
             {error}
           </div>
         )}
@@ -92,36 +117,42 @@ export default function SenacLogin() {
           className="flex flex-col items-center gap-4 w-full max-w-md"
           onSubmit={handleEnter}
         >
-          <span className="w-[340px] md:w-[380px] text-center bg-white/25 text-white text-base md:text-lg font-bold rounded-md py-2">
+          <label htmlFor="email" className="w-[340px] md:w-[380px] text-center bg-white/25 text-white text-base md:text-lg font-bold rounded-md py-2">
             e-mail
-          </span>
+          </label>
           <input
+            id="email"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             placeholder="seu email"
-            className="w-[340px] md:w-[380px] rounded-md border border-white/50 bg-white/20 text-white placeholder-white/80 px-5 py-3 md:py-3.5 outline-none focus:border-white"
+            autoComplete="email"
+            className="w-[340px] md:w-[380px] rounded-md border border-white/50 bg-white/20 text-white placeholder-white/80 px-5 py-3 md:py-3.5 outline-none focus:border-white transition"
             disabled={loading}
+            required
           />
 
-          <span className="w-[340px] md:w-[380px] text-center bg-white/25 text-white text-base md:text-lg font-bold rounded-md py-2">
+          <label htmlFor="senha" className="w-[340px] md:w-[380px] text-center bg-white/25 text-white text-base md:text-lg font-bold rounded-md py-2">
             senha
-          </span>
+          </label>
           <input
+            id="senha"
             type="password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
+            name="senha"
+            value={formData.senha}
+            onChange={handleChange}
             placeholder="sua senha"
-            className="w-[340px] md:w-[380px] rounded-md border border-white/50 bg-white/20 text-white placeholder-white/80 px-5 py-3 md:py-3.5 outline-none focus:border-white"
+            autoComplete="current-password"
+            className="w-[340px] md:w-[380px] rounded-md border border-white/50 bg-white/20 text-white placeholder-white/80 px-5 py-3 md:py-3.5 outline-none focus:border-white transition"
             disabled={loading}
+            required
           />
-
-          <button type="submit" className="sr-only">enviar</button>
         </form>
 
         <Link
           to="/senac/cadastro"
-          className="text-white/90 text-base underline hover:opacity-90"
+          className="text-white/90 text-base underline hover:opacity-90 transition"
         >
           criar conta
         </Link>
@@ -131,14 +162,21 @@ export default function SenacLogin() {
         type="button"
         onClick={handleEnter}
         disabled={loading}
-        className="fixed bottom-6 right-8 bg-white text-[#FF7700] hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed font-bold px-10 py-3 rounded text-lg"
+        className="fixed bottom-6 right-8 bg-white text-[#FF7700] hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed font-bold px-10 py-3 rounded text-lg transition flex items-center gap-2"
       >
-        {loading ? "ENTRANDO..." : "ENTRAR"}
+        {loading ? (
+          <>
+            <LoadingSpinner size="sm" color="orange" />
+            <span>ENTRANDO...</span>
+          </>
+        ) : (
+          "ENTRAR"
+        )}
       </button>
 
       <Link
         to="/senac"
-        className="absolute bottom-6 left-6 text-white/90 px-4 py-2 border border-white/40 rounded hover:text-white"
+        className="absolute bottom-6 left-6 text-white/90 px-4 py-2 border border-white/40 rounded hover:text-white transition"
         aria-label="Voltar para Senac"
       >
         voltar

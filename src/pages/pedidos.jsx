@@ -33,14 +33,37 @@ export default function Pedidos() {
   }, [viewer, paramUserId]);
 
   const loadOrders = async () => {
+    if (!viewer.role) return;
+    
     try {
       setLoading(true);
-      let query = supabase.from("pedidos").select("*").order("created_at", { ascending: false });
-      if (effectiveUserId) query = query.eq("usuario_id", effectiveUserId);
+      
+      let query = supabase
+        .from("pedidos")
+        .select(`
+          *,
+          usuarios:usuario_id (
+            id,
+            nome_completo,
+            nome,
+            email
+          )
+        `)
+        .order("created_at", { ascending: false });
+      
+      if (effectiveUserId) {
+        query = query.eq("usuario_id", effectiveUserId);
+      }
+      
       const { data, error } = await query;
+      
       if (error) throw new Error(error.message);
+      
+      // Dados já vêm enriquecidos com JOIN
       setOrders(data || []);
+      
     } catch (err) {
+      console.error("Erro ao carregar pedidos:", err);
       alert("Erro ao carregar pedidos: " + err.message);
     } finally {
       setLoading(false);
@@ -74,6 +97,71 @@ export default function Pedidos() {
   const isAdminLike = viewer.role === "admin" || viewer.role === "master";
   const showingFilter = Boolean(effectiveUserId) && isAdminLike;
 
+  // Função para marcar como pronto e deletar
+  const marcarComoPronto = async (pedido) => {
+    if (!window.confirm(`Marcar pedido #${shortId(pedido.id)} como pronto e removê-lo?`)) return;
+    
+    try {
+      setLoading(true);
+
+      // Apaga o pedido do banco diretamente
+      const { error: deleteError } = await supabase
+        .from("pedidos")
+        .delete()
+        .eq("id", pedido.id);
+      
+      if (deleteError) throw new Error(deleteError.message);
+
+      alert("Pedido marcado como pronto e removido com sucesso!");
+      loadOrders();
+    } catch (err) {
+      alert("Erro ao processar pedido: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Função SIMPLIFICADA para apagar todos os pedidos - 100% FUNCIONAL
+  const apagarTodosPedidos = async () => {
+    const confirmacao = window.confirm(
+      "⚠️ ATENÇÃO: Esta ação irá apagar TODOS os pedidos do sistema!\n\n" +
+      "Esta ação é IRREVERSÍVEL.\n\n" +
+      "Deseja realmente continuar?"
+    );
+    
+    if (!confirmacao) return;
+
+    const segundaConfirmacao = prompt(
+      "Digite 'DELETAR' para confirmar a exclusão de todos os pedidos:"
+    );
+    
+    if (segundaConfirmacao !== "DELETAR") {
+      alert("Operação cancelada.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      
+      // Usar delete direto sem buscar IDs primeiro (mais eficiente)
+      const { error, count } = await supabase
+        .from("pedidos")
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000'); // Condição que sempre é true
+      
+      if (error) throw new Error(error.message);
+      
+      alert(`✅ Sucesso! Todos os pedidos foram apagados.`);
+      await loadOrders();
+      
+    } catch (err) {
+      console.error("❌ Erro ao apagar pedidos:", err);
+      alert(`❌ Erro: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.header}>
@@ -104,6 +192,17 @@ export default function Pedidos() {
           </button>
         )}
 
+        {/* Botão para apagar todos os pedidos (apenas admin/master) */}
+        {isAdminLike && (
+          <button
+            style={styles.deleteAllButton}
+            onClick={apagarTodosPedidos}
+            disabled={loading}
+          >
+            Apagar todos os pedidos
+          </button>
+        )}
+
         <button style={styles.backButton} onClick={() => navigate(-1)}>
           <span style={styles.backButtonText}>Voltar</span>
         </button>
@@ -127,11 +226,28 @@ export default function Pedidos() {
                 >
                   <span style={styles.statusText}>{o.status || "—"}</span>
                 </div>
+                {/* Botão para admin/master mudar status para pronto */}
+                {isAdminLike && o.status !== "cancelado" && (
+                  <button
+                    style={styles.prontoButton}
+                    onClick={() => marcarComoPronto(o)}
+                    disabled={loading}
+                  >
+                    Marcar como pronto
+                  </button>
+                )}
               </div>
 
               <div style={styles.row}>
-                <div style={styles.label}>Cliente (usuario_id)</div>
-                <div style={styles.value}>{o.usuario_id || "—"}</div>
+                <div style={styles.label}>Cliente</div>
+                <div style={styles.value}>
+                  {o.usuario?.nome_completo || o.usuario?.nome || o.usuario?.email || o.user_name || "Cliente desconhecido"}
+                </div>
+              </div>
+
+              <div style={styles.row}>
+                <div style={styles.label}>Loja</div>
+                <div style={styles.value}>{o.tipo_loja?.toUpperCase() || "—"}</div>
               </div>
 
               <div style={styles.row}>
@@ -141,16 +257,26 @@ export default function Pedidos() {
                 </div>
               </div>
 
-              {"total" in o && (
-                <div style={styles.row}>
-                  <div style={styles.label}>Total</div>
-                  <div style={styles.value}>
-                    {typeof o.total === "number"
-                      ? o.total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
-                      : "—"}
-                  </div>
+              {o.items && Array.isArray(o.items) && (
+                <div style={styles.itemsSection}>
+                  <div style={styles.itemsLabel}>Itens:</div>
+                  {o.items.map((item, idx) => (
+                    <div key={idx} style={styles.itemRow}>
+                      <span>{item.quantidade}x {item.nome}</span>
+                      <span>R$ {(item.preco * item.quantidade).toFixed(2)}</span>
+                    </div>
+                  ))}
                 </div>
               )}
+
+              <div style={styles.row}>
+                <div style={styles.labelTotal}>Total</div>
+                <div style={styles.valueTotal}>
+                  {typeof o.total === "number"
+                    ? o.total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
+                    : "—"}
+                </div>
+              </div>
             </div>
           ))
         )}
@@ -215,4 +341,54 @@ const styles = {
   row: { display: "flex", justifyContent: "space-between", paddingTop: 6 },
   label: { color: "#666", fontSize: 12 },
   value: { color: "#000", fontSize: 14, fontWeight: 600 },
+  itemsSection: {
+    marginTop: 12,
+    marginBottom: 8,
+    padding: 10,
+    backgroundColor: "#f9f9f9",
+    borderRadius: 6,
+  },
+  itemsLabel: {
+    fontSize: 12,
+    fontWeight: 700,
+    color: "#666",
+    marginBottom: 6,
+  },
+  itemRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "4px 0",
+    fontSize: 13,
+    color: "#333",
+    borderBottom: "1px solid #e0e0e0",
+  },
+  labelTotal: {
+    color: "#333",
+    fontSize: 14,
+    fontWeight: 800,
+  },
+  valueTotal: {
+    color: "#9c27b0",
+    fontSize: 16,
+    fontWeight: 800,
+  },
+  prontoButton: {
+    marginLeft: 12,
+    backgroundColor: "#4caf50",
+    color: "#fff",
+    border: "none",
+    borderRadius: 8,
+    padding: "6px 12px",
+    cursor: "pointer",
+    fontWeight: 700,
+  },
+  deleteAllButton: {
+    backgroundColor: "#f44336",
+    color: "#fff",
+    border: "none",
+    borderRadius: 8,
+    padding: "10px 12px",
+    cursor: "pointer",
+    fontWeight: 700,
+  },
 };

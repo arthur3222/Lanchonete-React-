@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SideMenu from "../components/SideMenu";
+import PedidoNotification from "../components/PedidoNotification";
 
 export default function LojasSenac() {
   const [open, setOpen] = useState(false);
@@ -17,14 +18,17 @@ export default function LojasSenac() {
   }, []);
 
   const menuItems = [
-    { label: "inicial", path: "/" },
-    { label: "criar pedido", path: "/ProdutoSenac" },
-    { label: "pagina", path: "/lojasenac" },
+    { label: "home", path: "/" },
+    { label: "fazer pedido", path: "/ProdutoSenac" },
+    { label: "Loja Sesc", path: "/lojasesc" },
+    { label: "Loja Senac", path: "/lojasenac" },
     { label: "carrinho", path: "/carrinhoSenac" },
   ];
 
   return (
     <div className="relative min-h-screen w-full bg-[#FF7700] text-white flex flex-col items-center justify-start px-4 pt-8">
+      <PedidoNotification />
+
       <SideMenu
         open={open}
         onClose={() => setOpen(false)}

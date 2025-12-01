@@ -138,3 +138,5 @@ export default function HamburgerMenu({ light = false }) {
     </>
   );
 }
+
+// Nenhuma alteração necessária aqui, apenas garantir o uso do componente nas páginas desejadas.

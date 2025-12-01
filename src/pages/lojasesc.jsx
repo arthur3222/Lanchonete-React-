@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SideMenu from "../components/SideMenu";
+import PedidoNotification from "../components/PedidoNotification";
 
 export default function Lojas() {
   const [open, setOpen] = useState(false);
@@ -17,14 +18,17 @@ export default function Lojas() {
   }, []);
 
   const menuItems = [
-    { label: "inicial", path: "/" },
-    { label: "criar pedido", path: "/ProdutoSesc" },
-    { label: "pagina", path: "/lojasesc" },
+    { label: "home", path: "/" },
+    { label: "fazer pedido", path: "/ProdutoSesc" },
+    { label: "Loja Sesc", path: "/lojasesc" },
+    { label: "Loja Senac", path: "/lojasenac" },
     { label: "carrinho", path: "/carrinhoSesc" },
   ];
 
   return (
     <div className="relative min-h-screen w-full bg-[#003E7E] text-white flex flex-col items-center justify-start px-4 pt-8">
+      <PedidoNotification />
+
       <SideMenu
         open={open}
         onClose={() => setOpen(false)}
