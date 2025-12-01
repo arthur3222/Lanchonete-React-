@@ -38,17 +38,10 @@ export default function Pedidos() {
     try {
       setLoading(true);
       
+      // Remover o JOIN - buscar apenas os pedidos
       let query = supabase
         .from("pedidos")
-        .select(`
-          *,
-          usuarios:usuario_id (
-            id,
-            nome_completo,
-            nome,
-            email
-          )
-        `)
+        .select("*")
         .order("created_at", { ascending: false });
       
       if (effectiveUserId) {
@@ -59,7 +52,34 @@ export default function Pedidos() {
       
       if (error) throw new Error(error.message);
       
-      // Dados já vêm enriquecidos com JOIN
+      // Buscar informações dos usuários separadamente
+      if (data && data.length > 0) {
+        const userIds = [...new Set(data.map(p => p.usuario_id).filter(Boolean))];
+        
+        if (userIds.length > 0) {
+          const { data: usuarios, error: userError } = await supabase
+            .from("usuarios")
+            .select("id, nome_completo, nome, email")
+            .in("id", userIds);
+          
+          if (!userError && usuarios) {
+            // Mapear usuários para os pedidos
+            const usersMap = usuarios.reduce((acc, user) => {
+              acc[user.id] = user;
+              return acc;
+            }, {});
+            
+            const enrichedData = data.map(pedido => ({
+              ...pedido,
+              usuario: usersMap[pedido.usuario_id] || null
+            }));
+            
+            setOrders(enrichedData);
+            return;
+          }
+        }
+      }
+      
       setOrders(data || []);
       
     } catch (err) {

@@ -2,82 +2,118 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext(null);
 
+const STORAGE_KEYS = {
+  sesc: 'carrinhoSesc',
+  senac: 'carrinhoSenac',
+};
+
+function loadCartFromStorage(store) {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEYS[store]);
+    return saved ? JSON.parse(saved) : [];
+  } catch (error) {
+    console.error(`Erro ao carregar carrinho ${store}:`, error);
+    return [];
+  }
+}
+
+function saveCartToStorage(store, cart) {
+  try {
+    localStorage.setItem(STORAGE_KEYS[store], JSON.stringify(cart || []));
+  } catch (error) {
+    console.error(`Erro ao salvar carrinho ${store}:`, error);
+  }
+}
+
 export function CartProvider({ children }) {
-  const [carts, setCarts] = useState(() => {
-    // Carregar carrinhos do localStorage ao iniciar
-    try {
-      const sescSaved = localStorage.getItem('carrinhoSesc');
-      const senacSaved = localStorage.getItem('carrinhoSenac');
-      return {
-        sesc: sescSaved ? JSON.parse(sescSaved) : [],
-        senac: senacSaved ? JSON.parse(senacSaved) : [],
-      };
-    } catch {
-      return { sesc: [], senac: [] };
-    }
+  const [carts, setCarts] = useState({
+    sesc: loadCartFromStorage('sesc'),
+    senac: loadCartFromStorage('senac'),
   });
 
   // Sincronizar com localStorage quando mudar
   useEffect(() => {
-    localStorage.setItem('carrinhoSesc', JSON.stringify(carts.sesc || []));
+    saveCartToStorage('sesc', carts.sesc);
   }, [carts.sesc]);
 
   useEffect(() => {
-    localStorage.setItem('carrinhoSenac', JSON.stringify(carts.senac || []));
+    saveCartToStorage('senac', carts.senac);
   }, [carts.senac]);
 
   const addToCart = (store, product) => {
+    if (!product || !product.id) {
+      console.error('Produto inválido:', product);
+      return;
+    }
+
     const key = store === 'senac' ? 'senac' : 'sesc';
     
     setCarts(prev => {
-      const currentCart = prev[key];
+      const currentCart = Array.isArray(prev[key]) ? prev[key] : [];
       
       // Buscar produto existente pelo ID
-      const productId = product.id || product.productId;
-      const existingIndex = currentCart.findIndex(item => {
-        const itemId = item.id || item.productId;
-        return itemId && productId && itemId === productId;
-      });
+      const productId = product.id;
+      const existingIndex = currentCart.findIndex(item => item.id === productId);
       
-      // Quantidade a ser adicionada (padrão 1 se não especificado)
-      const qtyToAdd = Number(product.quantidade || product.qtd || 1);
+      // Quantidade a ser adicionada (padrão 1)
+      const qtyToAdd = Math.max(1, Number(product.quantidade || 1));
       
-      // Se o produto já existe, incrementa pela quantidade especificada
       if (existingIndex !== -1) {
+        // Produto já existe - atualizar quantidade
         const updatedCart = [...currentCart];
         const existingProduct = { ...updatedCart[existingIndex] };
-        const currentQty = Number(existingProduct.quantidade || existingProduct.qtd || 1);
+        const currentQty = Math.max(1, Number(existingProduct.quantidade || 1));
         existingProduct.quantidade = currentQty + qtyToAdd;
-        delete existingProduct.qtd; // padronizar para 'quantidade'
         updatedCart[existingIndex] = existingProduct;
         return { ...prev, [key]: updatedCart };
       }
       
-      // Se não existe, adiciona novo produto com a quantidade especificada
-      const newProduct = { ...product, quantidade: qtyToAdd };
-      delete newProduct.qtd;
+      // Produto novo - adicionar
+      const newProduct = {
+        ...product,
+        quantidade: qtyToAdd,
+        preco: parseFloat(product.preco) || 0,
+      };
       return { ...prev, [key]: [...currentCart, newProduct] };
     });
   };
 
   const removeFromCart = (store, index) => {
     const key = store === 'senac' ? 'senac' : 'sesc';
-    setCarts(prev => ({ ...prev, [key]: prev[key].filter((_, i) => i !== index) }));
+    setCarts(prev => {
+      const currentCart = Array.isArray(prev[key]) ? prev[key] : [];
+      return { ...prev, [key]: currentCart.filter((_, i) => i !== index) };
+    });
   };
 
   const clearCart = (store) => {
     const key = store === 'senac' ? 'senac' : 'sesc';
     setCarts(prev => ({ ...prev, [key]: [] }));
-    localStorage.removeItem(store === 'sesc' ? 'carrinhoSesc' : 'carrinhoSenac');
+    localStorage.removeItem(STORAGE_KEYS[key]);
   };
 
-  const setCartItems = (store, items) => {
+  const updateQuantity = (store, index, newQuantity) => {
     const key = store === 'senac' ? 'senac' : 'sesc';
-    setCarts(prev => ({ ...prev, [key]: items }));
+    const qty = Math.max(1, Number(newQuantity) || 1);
+    
+    setCarts(prev => {
+      const currentCart = Array.isArray(prev[key]) ? [...prev[key]] : [];
+      if (currentCart[index]) {
+        currentCart[index] = { ...currentCart[index], quantidade: qty };
+      }
+      return { ...prev, [key]: currentCart };
+    });
   };
 
   return (
-    <CartContext.Provider value={{ carts, addToCart, removeFromCart, clearCart, setCartItems }}>
+    <CartContext.Provider value={{ 
+      carts, 
+      addToCart, 
+      removeFromCart, 
+      clearCart, 
+      updateQuantity,
+      setCarts // Manter para compatibilidade
+    }}>
       {children}
     </CartContext.Provider>
   );
@@ -85,6 +121,6 @@ export function CartProvider({ children }) {
 
 export function useCart() {
   const ctx = useContext(CartContext);
-  if (!ctx) throw new Error('useCart must be used within CartProvider');
+  if (!ctx) throw new Error('useCart deve ser usado dentro de CartProvider');
   return ctx;
 }

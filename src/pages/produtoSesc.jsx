@@ -28,19 +28,9 @@ export default function ProdutoSesc() {
 	const [userRole, setUserRole] = useState(null);
 
 	const menuItems = [
-<<<<<<< HEAD
 		{ label: "Home", path: "/" },
 		{ label: "Café Senac", path: "/senac" },
 		{ label: "Carrinho", path: "/carrinhoSesc" },
-		{ label: "Lanchonete", path: "/ProdutoSesc" },
-		{ label: "Sair", path: "/sesc" },
-=======
-		{ label: "home", path: "/" },
-		{ label: "fazer pedido", path: "/ProdutoSesc" },
-		{ label: "Loja Sesc", path: "/lojasesc" },
-		{ label: "Loja Senac", path: "/lojasenac" },
-		{ label: "carrinho", path: "/carrinhoSesc" },
->>>>>>> 223ed2eb9cba02cfdf0ff53711b4acee8a3b373d
 	];
 
 	useEffect(() => {
@@ -63,14 +53,6 @@ export default function ProdutoSesc() {
 
 	return (
 		<div className="min-h-screen bg-[#0B4A80] text-white">
-<<<<<<< HEAD
-			<SideMenu
-				open={open}
-				onClose={() => setOpen(false)}
-				title="Café Sesc"
-				items={menuItems}
-				accent="bg-[#003a73]"
-=======
 			<PedidoNotification />
 
 			<SideMenu 
@@ -80,7 +62,6 @@ export default function ProdutoSesc() {
 				items={menuItems} 
 				accent="bg-orange-500"
 				role={userRole}
->>>>>>> 223ed2eb9cba02cfdf0ff53711b4acee8a3b373d
 			/>
 
 			<header className="h-20 flex items-center px-5">
@@ -103,15 +84,10 @@ export default function ProdutoSesc() {
 							</div>
 						</div>
 						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-8 items-start justify-items-center">
-<<<<<<< HEAD
-							{produtos[cat].map((item) => (
-								<ProductTile key={item.id} item={item} store="sesc" />
-=======
 							{produtosCadastrados.map((item) => (
 								<div key={item.id} className="w-[48%] min-w-[220px]">
 									<ProductTile item={item} store="sesc" />
 								</div>
->>>>>>> 223ed2eb9cba02cfdf0ff53711b4acee8a3b373d
 							))}
 						</div>
 					</section>
