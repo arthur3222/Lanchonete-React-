@@ -1,27 +1,41 @@
-import React, { useState } from "react";
-import { User } from "lucide-react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SideMenu from "../components/SideMenu";
+import PedidoNotification from "../components/PedidoNotification";
 
 export default function LojasSenac() {
   const [open, setOpen] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("authUser");
+      const user = stored ? JSON.parse(stored) : null;
+      setUserRole(user?.role || null);
+    } catch {
+      setUserRole(null);
+    }
+  }, []);
+
   const menuItems = [
-    { label: "Home", path: "/" },
-    { label: "Senac (início)", path: "/senac" },
-    { label: "Sesc (início)", path: "/sesc" },
-    { label: "Carrinho Senac", path: "/carrinhoSenac" },
-    { label: "Lanchonete Senac", path: "/ProdutoSenac" },
-    { label: "Sair", path: "/" },
+    { label: "home", path: "/" },
+    { label: "fazer pedido", path: "/ProdutoSenac" },
+    { label: "Loja Sesc", path: "/lojasesc" },
+    { label: "Loja Senac", path: "/lojasenac" },
+    { label: "carrinho", path: "/carrinhoSenac" },
   ];
 
   return (
     <div className="relative min-h-screen w-full bg-[#FF7700] text-white flex flex-col items-center justify-start px-4 pt-8">
+      <PedidoNotification />
+
       <SideMenu
         open={open}
         onClose={() => setOpen(false)}
-        title="Café Senac"
+        title="hamburger pedido senac"
         items={menuItems}
-        accent="bg-[#FF7700]"
+        accent="bg-orange-500"
+        role={userRole}
       />
 
       <button
@@ -46,9 +60,18 @@ export default function LojasSenac() {
         SEJA BEM VINDO
       </h1>
 
-      {/* Avatar círculo branco */}
+      {/* Avatar círculo branco com SVG inline */}
       <div className="mt-6 w-40 h-40 bg-white rounded-full flex items-center justify-center">
-        <User size={80} className="text-black" />
+        <svg
+          viewBox="0 0 24 24"
+          className="w-20 h-20 text-black"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
       </div>
 
       <span className="text-xs font-semibold tracking-wide mt-4 mb-6">LOJAS</span>
@@ -67,24 +90,8 @@ export default function LojasSenac() {
       </Link>
 
       <div className="mt-10 flex gap-4">
-        <Link
-          to="/sesc"
-          className="px-4 py-2 border border-white/40 rounded text-sm hover:bg-white/10"
-        >
-          voltar
-        </Link>
-        <Link
-          to="/sesc"
-          className="px-4 py-2 border border-white/40 rounded text-sm hover:bg-white/10"
-        >
-          sesc
-        </Link>
-        <Link
-          to="/senac"
-          className="px-4 py-2 border border-white/40 rounded text-sm hover:bg-white/10"
-        >
-          senac
-        </Link>
+        <Link to="/" className="px-4 py-2 border border-white/40 rounded text-sm hover:bg-white/10">home</Link>
+        <Link to="/senac" className="px-4 py-2 border border-white/40 rounded text-sm hover:bg-white/10">voltar</Link>
       </div>
     </div>
   );

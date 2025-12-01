@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ShoppingCart, Menu } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
+import SideMenu from "../components/SideMenu";
 
 export default function DescricaoProduto() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+
   // Recebe o produto via state
   const produto = location.state?.produto || {
     nome: "SUCO DE UVA DEL VALLE",
@@ -15,6 +19,24 @@ export default function DescricaoProduto() {
   };
   const [quantidade, setQuantidade] = useState(1);
 
+  const menuItems = [
+    { label: "home", path: "/" },
+    { label: "fazer pedido", path: "/ProdutoSesc" },
+    { label: "Loja Sesc", path: "/lojasesc" },
+    { label: "Loja Senac", path: "/lojasenac" },
+    { label: "carrinho", path: "/carrinhoSesc" },
+  ];
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("authUser");
+      const user = stored ? JSON.parse(stored) : null;
+      setUserRole(user?.role || null);
+    } catch {
+      setUserRole(null);
+    }
+  }, []);
+
   function adicionarAoCarrinho() {
     // Aqui você pode implementar lógica para adicionar ao carrinho (ex: contexto ou localStorage)
     // Redireciona para a página do carrinho
@@ -23,11 +45,27 @@ export default function DescricaoProduto() {
 
   return (
     <div className="min-h-screen w-full bg-[#00529B] flex flex-col px-8 py-6 items-center relative">
+      <SideMenu
+        open={open}
+        onClose={() => setOpen(false)}
+        title="hamburger pedido sesc"
+        items={menuItems}
+        accent="bg-orange-500"
+        role={userRole}
+      />
+
       {/* Menu hambúrguer */}
-      <div className="self-start mb-4">
-        <Menu size={32} className="text-white" />
-      </div>
-      <hr className="border-white/40 w-full mb-8" />
+      <button
+        onClick={() => setOpen(true)}
+        aria-label="Abrir menu"
+        className="absolute top-4 left-4 z-30 w-10 h-10 flex items-center justify-center rounded-md border border-white/20 bg-black/20 hover:bg-black/30"
+      >
+        <svg viewBox="0 0 24 24" className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M3 6h18M3 12h18M3 18h18" />
+        </svg>
+      </button>
+
+      <hr className="border-white/40 w-full mb-8 mt-14" />
       {/* Imagem do produto */}
       <img src={produto.img} alt={produto.nome} className="w-80 h-56 object-cover bg-white rounded mx-auto mb-4" />
       {/* Descrição */}
