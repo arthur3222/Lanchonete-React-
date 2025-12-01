@@ -44,7 +44,7 @@ export default function SescEscolha() {
             to="/sesc/login"
             className="w-[380px] md:w-[440px] lg:w-[500px] text-center px-8 py-5 rounded-md border border-white/70 bg-blue-800/70 hover:bg-blue-800/90 transition-colors text-2xl md:text-3xl font-semibold"
           >
-            entra
+            entrar
           </Link>
           <Link
             to="/sesc/cadastro"

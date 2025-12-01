@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Trash2, ShoppingBasket, Menu } from "lucide-react";
+import { Link } from "react-router-dom";
+import SideMenu from "../components/SideMenu";
 
 // Mock de produtos do carrinho
 const carrinho = [
@@ -27,14 +29,48 @@ const carrinho = [
 ];
 
 export default function CarrinhoSesc() {
+  const [open, setOpen] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+
+  const menuItems = [
+    { label: "inicial", path: "/" },
+    { label: "criar pedido", path: "/ProdutoSesc" },
+    { label: "pagina", path: "/lojasesc" },
+    { label: "carrinho", path: "/carrinhoSesc" },
+  ];
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("authUser");
+      const user = stored ? JSON.parse(stored) : null;
+      setUserRole(user?.role || null);
+    } catch {
+      setUserRole(null);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen w-full bg-[#00529B] flex flex-col px-8 py-6 relative">
+      <SideMenu
+        open={open}
+        onClose={() => setOpen(false)}
+        title="hamburger pedido sesc"
+        items={menuItems}
+        accent="bg-orange-500"
+        role={userRole}
+      />
+      
       {/* Menu hambúrguer */}
-      <div className="mb-8">
+      <button
+        onClick={() => setOpen(true)}
+        aria-label="Abrir menu"
+        className="absolute top-4 left-4 z-30 w-10 h-10 flex items-center justify-center rounded-md border border-white/20 bg-black/20 hover:bg-black/30"
+      >
         <Menu size={32} className="text-white" />
-      </div>
+      </button>
+
       {/* Lista de produtos do carrinho */}
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-10 mt-16">
         {carrinho.map((item) => (
           <div key={item.id} className="flex items-center gap-8">
             <img src={item.img} alt={item.nome} className="w-36 h-32 object-cover rounded" />
@@ -51,6 +87,15 @@ export default function CarrinhoSesc() {
           </div>
         ))}
       </div>
+
+      {/* Link voltar */}
+      <Link
+        to="/ProdutoSesc"
+        className="fixed bottom-8 left-10 bg-white/15 border border-white/30 text-white px-4 py-2 rounded backdrop-blur-sm text-sm font-semibold hover:bg-white/20"
+      >
+        voltar
+      </Link>
+
       {/* Ícone de carrinho no canto inferior direito */}
       <div className="fixed bottom-8 right-10 bg-white rounded-full p-2 shadow">
         <ShoppingBasket size={32} className="text-[#00529B]" />

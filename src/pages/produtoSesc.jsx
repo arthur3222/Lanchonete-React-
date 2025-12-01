@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { produtos } from "../data/produtos";
 import SideMenu from "../components/SideMenu";
 import { Link } from "react-router-dom";
+import { supabase } from "../supabaseClient"; // Corrija para importação nomeada
 
 function ProductTile({ item, store = "sesc" }) {
 	return (
 		<Link to={`/produto/${item.id}?store=${store}`} className="flex flex-col items-center gap-2 text-center">
 			<div className="w-28 h-28 md:w-32 md:h-32 bg-white rounded-sm overflow-hidden flex items-center justify-center shadow-sm">
-				<img src={item.img} alt={item.nome} className="w-full h-full object-cover" />
+				{/* Só renderiza a imagem se houver valor válido */}
+				{item.img ? (
+					<img src={item.img} alt={item.nome} className="w-full h-full object-cover" />
+				) : (
+					<div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">Sem imagem</div>
+				)}
 			</div>
 			<div className="text-xs font-extrabold uppercase text-white">{item.nome}</div>
 			<div className="text-xs text-white/90">R$ {Number(item.preco).toFixed(2).replace(".", ",")}</div>
@@ -17,18 +23,44 @@ function ProductTile({ item, store = "sesc" }) {
 
 export default function ProdutoSesc() {
 	const [open, setOpen] = useState(false);
+	const [produtosCadastrados, setProdutosCadastrados] = useState([]);
+	const [userRole, setUserRole] = useState(null);
+
 	const menuItems = [
-		{ label: "Home", path: "/" },
-		{ label: "Sesc (início)", path: "/sesc" },
-		{ label: "Senac (início)", path: "/senac" },
-		{ label: "Carrinho Sesc", path: "/carrinhoSesc" },
-		{ label: "Lanchonete Sesc", path: "/ProdutoSesc" },
-		{ label: "Sair", path: "/" },
+		{ label: "inicial", path: "/" },
+		{ label: "criar pedido", path: "/ProdutoSesc" },
+		{ label: "pagina", path: "/lojasesc" },
+		{ label: "carrinho", path: "/carrinhoSesc" },
 	];
+
+	useEffect(() => {
+		async function fetchProdutos() {
+			const { data, error } = await supabase
+				.from("produtos")
+				.select("*");
+			if (!error) setProdutosCadastrados(data || []);
+		}
+		fetchProdutos();
+
+		try {
+			const stored = localStorage.getItem("authUser");
+			const user = stored ? JSON.parse(stored) : null;
+			setUserRole(user?.role || null);
+		} catch {
+			setUserRole(null);
+		}
+	}, []);
 
 	return (
 		<div className="min-h-screen bg-[#0B4A80] text-white">
-			<SideMenu open={open} onClose={() => setOpen(false)} title="Café Sesc" items={menuItems} accent="bg-[#003a73]" />
+			<SideMenu 
+				open={open} 
+				onClose={() => setOpen(false)} 
+				title="hamburger pedido sesc" 
+				items={menuItems} 
+				accent="bg-orange-500"
+				role={userRole}
+			/>
 
 			<header className="h-20 flex items-center px-5 relative">
 				<button
@@ -44,27 +76,25 @@ export default function ProdutoSesc() {
 			</header>
 
 			<main className="px-6 pb-24 max-w-6xl mx-auto">
-				{Object.keys(produtos).map((cat) => (
-					<section key={cat} className="mb-12">
+				{/* Apenas produtos cadastrados no Supabase */}
+				{produtosCadastrados.length > 0 ? (
+					<section className="mb-12">
 						<div className="flex justify-center mb-6">
-							<div
-								data-source="src/data/produtos.js"
-								title={`categoria: ${cat} — definida em src/data/produtos.js`}
-								className="bg-orange-500 w-28 sm:w-40 md:w-56 py-1 rounded-sm font-bold uppercase text-sm text-center"
-							>
-								{cat}
+							<div className="bg-orange-500 w-28 sm:w-40 md:w-56 py-1 rounded-sm font-bold uppercase text-sm text-center">
+								Cadastrados
 							</div>
 						</div>
-
 						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-8 items-start justify-items-center">
-							{produtos[cat].map((item) => (
+							{produtosCadastrados.map((item) => (
 								<div key={item.id} className="w-[48%] min-w-[220px]">
 									<ProductTile item={item} store="sesc" />
 								</div>
 							))}
 						</div>
 					</section>
-				))}
+				) : (
+					<div className="text-center text-white/70 mt-10">Nenhum produto cadastrado.</div>
+				)}
 			</main>
 
 			<Link

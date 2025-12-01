@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 export default function HamburgerMenu({ light = false }) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const panelRef = useRef(null);
   const firstLinkRef = useRef(null);
+  const [role, setRole] = useState(null);
 
   const toggle = () => setOpen(o => !o);
   const close = () => setOpen(false);
@@ -29,10 +30,8 @@ export default function HamburgerMenu({ light = false }) {
     document.addEventListener("mousedown", handleOutside);
     document.addEventListener("keydown", handleEsc);
 
-    // bloquear scroll do body quando o menu estiver aberto
     if (open) {
       document.body.style.overflow = "hidden";
-      // foca o primeiro link disponível
       setTimeout(() => {
         firstLinkRef.current?.focus();
       }, 0);
@@ -47,16 +46,44 @@ export default function HamburgerMenu({ light = false }) {
     };
   }, [open]);
 
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("authUser");
+      const u = stored ? JSON.parse(stored) : null;
+      setRole(u?.role || null);
+    } catch {
+      setRole(null);
+    }
+  }, [location.pathname]);
+
   const baseColor = light ? "text-gray-900" : "text-white";
   const bgPanel = light ? "bg-white text-gray-900" : "bg-gray-900 text-white";
 
+  // Substitui pelos itens solicitados
   const menuItems = [
     { label: "inicial", path: "/" },
-    { label: "sesc", path: "/sesc" },
-    { label: "senac", path: "/senac" },
-    { label: "lojas", path: "/lojas" },
-    // ajuste os caminhos conforme sua aplicação
+    { label: "criar pedido", path: "/ProdutoSesc" },
+    { label: "pagina", path: "/lojasesc" },
+    { label: "carrinho", path: "/carrinhoSesc" },
   ];
+
+  // Mostrar atalhos de Admin/Master apenas dentro das rotas de loja
+  const isSescLoja = location.pathname.startsWith("/lojasesc");
+  const isSenacLoja = location.pathname.startsWith("/lojasenac");
+  const isInLoja = isSescLoja || isSenacLoja;
+
+  const extraItems = [];
+  if (isInLoja && (role === "admin" || role === "master")) {
+    extraItems.push({
+      label: "admin",
+      path: isSenacLoja ? "/adminSenac" : "/adminSesc",
+    });
+  }
+  if (isInLoja && role === "master") {
+    extraItems.push({ label: "adm master", path: "/masterAdmin" });
+  }
+
+  const items = [...menuItems, ...extraItems];
 
   return (
     <>
@@ -89,7 +116,7 @@ export default function HamburgerMenu({ light = false }) {
         aria-hidden={!open}
       >
         <nav className="flex flex-col items-center w-full gap-3" aria-label="Navegação principal">
-          {menuItems.map((it, idx) => (
+          {items.map((it, idx) => (
             <Link
               key={it.path + it.label}
               to={it.path}
